@@ -1,9 +1,14 @@
-﻿namespace API.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-public class Rolle
+namespace API.Models;
+
+[Table("tb_m_roles")]
+public class Role : BaseEntity
 {
-    public Guid Guid { get; set; }
+    [Column("name", TypeName ="nvarchar(100)")]
     public string Name { get; set; }
-    public DateTime CreatedDate { get; set; }
-    public DateTime ModifiedDate { get; set; }
+
+    // Cardinality 1 role banyak Account Roles
+    public ICollection<AccountRole>? AccountRoles { get; set; }
+
 }
