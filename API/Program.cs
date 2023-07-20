@@ -14,6 +14,7 @@ builder.Services.AddDbContext<BookingDBContext>(option => option.UseSqlServer(co
 
 // Add repositoris to the container
 builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
