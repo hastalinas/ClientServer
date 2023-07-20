@@ -5,34 +5,34 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Repositories;
 
-public class EmployeeRepository : IEmployeeRepository
+public class EducationRepository : IEducationRepository
 {
     private readonly BookingDBContext _context;
-    public EmployeeRepository(BookingDBContext context)
+    public EducationRepository(BookingDBContext context)
     {
         _context = context;
     }
 
-    public IEnumerable<Employee> GetAll()
+    public IEnumerable<Education> GetAll()
     {
-        return _context.Set<Employee>().ToList();
+        return _context.Set<Education>().ToList();
     }
 
-    public Employee? GetByGuid(Guid guid)
+    public Education? GetByGuid(Guid guid)
     {
-        var data = _context.Set<Employee>().Find(guid);
+        var data = _context.Set<Education>().Find(guid);
         _context.ChangeTracker.Clear();
         return data;
     }
 
-    public Employee? Create(Employee employee)
+    public Education? Create(Education education)
     {
         try
         {
-            _context.Set<Employee>()
-                    .Add(employee);
+            _context.Set<Education>()
+                    .Add(education);
             _context.SaveChanges();
-            return employee;
+            return education;
         }
         catch
         {
@@ -40,11 +40,11 @@ public class EmployeeRepository : IEmployeeRepository
         }
     }
 
-    public bool Update(Employee employee)
+    public bool Update(Education education)
     {
         try
         {
-            _context.Entry(employee)
+            _context.Entry(education)
                     .State = EntityState.Modified;
             _context.SaveChanges();
             return true;
@@ -55,12 +55,12 @@ public class EmployeeRepository : IEmployeeRepository
         }
     }
 
-    public bool Delete(Employee employee)
+    public bool Delete(Education education)
     {
         try
         {
-            _context.Set<Employee>()
-                    .Remove(employee);
+            _context.Set<Education>()
+                    .Remove(education);
             _context.SaveChanges();
             return true;
         }
