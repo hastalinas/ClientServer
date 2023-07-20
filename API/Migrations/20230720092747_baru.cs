@@ -4,7 +4,7 @@
 
 namespace API.Migrations
 {
-    public partial class TambahForeign : Migration
+    public partial class baru : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -34,26 +34,26 @@ namespace API.Migrations
                 column: "university_guid");
 
             migrationBuilder.AddForeignKey(
+                name: "FK_tb_m_accounts_tb_m_employees_guid",
+                table: "tb_m_accounts",
+                column: "guid",
+                principalTable: "tb_m_employees",
+                principalColumn: "guid",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_tb_m_educations_tb_m_employees_guid",
+                table: "tb_m_educations",
+                column: "guid",
+                principalTable: "tb_m_employees",
+                principalColumn: "guid",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_tb_m_educations_tb_m_universities_university_guid",
                 table: "tb_m_educations",
                 column: "university_guid",
                 principalTable: "tb_m_universities",
-                principalColumn: "guid",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_tb_m_employees_tb_m_accounts_guid",
-                table: "tb_m_employees",
-                column: "guid",
-                principalTable: "tb_m_accounts",
-                principalColumn: "guid",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_tb_m_employees_tb_m_educations_guid",
-                table: "tb_m_employees",
-                column: "guid",
-                principalTable: "tb_m_educations",
                 principalColumn: "guid",
                 onDelete: ReferentialAction.Cascade);
 
@@ -93,16 +93,16 @@ namespace API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_tb_m_educations_tb_m_universities_university_guid",
+                name: "FK_tb_m_accounts_tb_m_employees_guid",
+                table: "tb_m_accounts");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_tb_m_educations_tb_m_employees_guid",
                 table: "tb_m_educations");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_tb_m_employees_tb_m_accounts_guid",
-                table: "tb_m_employees");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_tb_m_employees_tb_m_educations_guid",
-                table: "tb_m_employees");
+                name: "FK_tb_m_educations_tb_m_universities_university_guid",
+                table: "tb_m_educations");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_tb_tr_account_roles_tb_m_accounts_acoount_guid",

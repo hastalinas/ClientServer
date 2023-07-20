@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(BookingDBContext))]
-    [Migration("20230718100009_TambahForeign")]
-    partial class TambahForeign
+    [Migration("20230720092747_baru")]
+    partial class baru
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,7 +27,6 @@ namespace API.Migrations
             modelBuilder.Entity("API.Models.Account", b =>
                 {
                     b.Property<Guid>("Guid")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("guid");
 
@@ -145,7 +144,6 @@ namespace API.Migrations
             modelBuilder.Entity("API.Models.Education", b =>
                 {
                     b.Property<Guid>("Guid")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("guid");
 
@@ -185,6 +183,7 @@ namespace API.Migrations
             modelBuilder.Entity("API.Models.Employee", b =>
                 {
                     b.Property<Guid>("Guid")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("guid");
 
@@ -328,6 +327,17 @@ namespace API.Migrations
                     b.ToTable("tb_m_universities");
                 });
 
+            modelBuilder.Entity("API.Models.Account", b =>
+                {
+                    b.HasOne("API.Models.Employee", "Employee")
+                        .WithOne("Account")
+                        .HasForeignKey("API.Models.Account", "Guid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
             modelBuilder.Entity("API.Models.AccountRole", b =>
                 {
                     b.HasOne("API.Models.Account", "Account")
@@ -368,49 +378,35 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Education", b =>
                 {
+                    b.HasOne("API.Models.Employee", "Employee")
+                        .WithOne("Education")
+                        .HasForeignKey("API.Models.Education", "Guid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("API.Models.University", "University")
                         .WithMany("Educations")
                         .HasForeignKey("UniversityGuid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Employee");
+
                     b.Navigation("University");
-                });
-
-            modelBuilder.Entity("API.Models.Employee", b =>
-                {
-                    b.HasOne("API.Models.Account", "Account")
-                        .WithOne("Employee")
-                        .HasForeignKey("API.Models.Employee", "Guid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Models.Education", "Education")
-                        .WithOne("Employee")
-                        .HasForeignKey("API.Models.Employee", "Guid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-
-                    b.Navigation("Education");
                 });
 
             modelBuilder.Entity("API.Models.Account", b =>
                 {
                     b.Navigation("AccountRoles");
-
-                    b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("API.Models.Education", b =>
-                {
-                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("API.Models.Employee", b =>
                 {
+                    b.Navigation("Account");
+
                     b.Navigation("Bookings");
+
+                    b.Navigation("Education");
                 });
 
             modelBuilder.Entity("API.Models.Role", b =>

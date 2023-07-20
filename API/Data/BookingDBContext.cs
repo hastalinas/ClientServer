@@ -32,9 +32,11 @@ public class BookingDBContext : DbContext
                                         .WithMany(u => u.Educations)
                                         .HasForeignKey(u => u.UniversityGuid);
 
-        modelBuilder.Entity<Education>().HasOne(e => e.Employee)
-                                        .WithOne(em => em.Education)
-                                        .HasForeignKey<Employee>(em => em.Guid);
+        // employee with education
+        modelBuilder.Entity<Education>()
+                    .HasOne(education => education.Employee)
+                    .WithOne(employee => employee.Education)
+                    .HasForeignKey<Education>(education => education.Guid);
 
         // Many booking with one room
         modelBuilder.Entity<Booking>().HasOne(r => r.Room)
@@ -47,9 +49,10 @@ public class BookingDBContext : DbContext
                                       .HasForeignKey(b => b.EmployeeGuid);
 
         // account with employee -> account fk
-        modelBuilder.Entity<Account>().HasOne(e => e.Employee)
-                                      .WithOne(a => a.Account)
-                                      .HasForeignKey<Employee>(a => a.Guid);
+        modelBuilder.Entity<Account>()
+                   .HasOne(account => account.Employee)
+                   .WithOne(employee => employee.Account)
+                   .HasForeignKey<Account>(account => account.Guid);
 
         // account with account role
         modelBuilder.Entity<Account>().HasMany(ac => ac.AccountRoles)
