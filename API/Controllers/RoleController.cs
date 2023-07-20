@@ -5,20 +5,20 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [ApiController]
-[Route("api/rooms")]
-public class RoomController : ControllerBase
+[Route("api/roles")]
+public class RoleController : ControllerBase
 {
-    private readonly IRoomRepository _roomRepository;
+    private readonly IRoleRepository _roleRepository;
 
-    public RoomController(IRoomRepository roomRepository)
+    public RoleController(IRoleRepository roleRepository)
     {
-        _roomRepository = roomRepository;
+        _roleRepository = roleRepository;
     }
 
     [HttpGet]
     public IActionResult GetAll()
     {
-        var result = _roomRepository.GetAll();
+        var result = _roleRepository.GetAll();
         if (!result.Any())
         {
             return NotFound();
@@ -30,7 +30,7 @@ public class RoomController : ControllerBase
     [HttpGet("{guid}")]
     public IActionResult GetByGuid(Guid guid)
     {
-        var result = _roomRepository.GetByGuid(guid);
+        var result = _roleRepository.GetByGuid(guid);
         if (result is null)
         {
             return NotFound();
@@ -40,9 +40,9 @@ public class RoomController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Insert(Room room)
+    public IActionResult Insert(Role role)
     {
-        var result = _roomRepository.Create(room);
+        var result = _roleRepository.Create(role);
         if (result is null)
         {
             return StatusCode(500, "Error Retrieve from database");
@@ -52,15 +52,15 @@ public class RoomController : ControllerBase
     }
 
     [HttpPut]
-    public IActionResult Update(Room room)
+    public IActionResult Update(Role role)
     {
-        var check = _roomRepository.GetByGuid(room.Guid);
+        var check = _roleRepository.GetByGuid(role.Guid);
         if (check is null)
         {
             return NotFound("Guid is not found");
         }
 
-        var result = _roomRepository.Update(room);
+        var result = _roleRepository.Update(role);
         if (!result)
         {
             return StatusCode(500, "Error Retrieve from database");
@@ -72,13 +72,13 @@ public class RoomController : ControllerBase
     [HttpDelete]
     public IActionResult Delete(Guid guid)
     {
-        var data = _roomRepository.GetByGuid(guid);
+        var data = _roleRepository.GetByGuid(guid);
         if (data is null)
         {
             return NotFound("Guid is not found");
         }
 
-        var result = _roomRepository.Delete(data);
+        var result = _roleRepository.Delete(data);
         if (!result)
         {
             return StatusCode(500, "Error Retrieve from database");
