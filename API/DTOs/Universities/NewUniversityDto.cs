@@ -9,7 +9,7 @@ public class NewUniversityDto
 
     public static implicit operator University(NewUniversityDto newUniversityDto)
     {
-        return new UniversityDto
+        return new University
         {
             Guid = new Guid(),
             Code = newUniversityDto.Code,
