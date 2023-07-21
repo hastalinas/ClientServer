@@ -8,6 +8,7 @@ public class UniversityDto
     public string Code { get; set; }
     public string Name { get; set; }
 
+    // Get
     public static implicit operator University(UniversityDto universityDto)
     {
         return new University
@@ -19,6 +20,7 @@ public class UniversityDto
         };
     }
 
+    // 
     public static explicit operator UniversityDto(University university)
     {
         return new UniversityDto
