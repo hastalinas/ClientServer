@@ -1,5 +1,6 @@
 ﻿using API.Contracts;
 using API.Models;
+using API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -19,6 +20,18 @@ public class EducationController : ControllerBase
     public IActionResult GetAll()
     {
         var result = _educationRepository.GetAll();
+        if (!result.Any())
+        {
+            return NotFound();
+        }
+
+        return Ok(result);
+    }
+
+    [HttpGet("name/{name}")]
+    public IActionResult GetByName(string name)
+    {
+        var result = _educationRepository.GetByName(name);
         if (!result.Any())
         {
             return NotFound();
