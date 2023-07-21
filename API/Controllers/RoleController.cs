@@ -1,5 +1,6 @@
 ﻿using API.Contracts;
 using API.Models;
+using API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -19,6 +20,18 @@ public class RoleController : ControllerBase
     public IActionResult GetAll()
     {
         var result = _roleRepository.GetAll();
+        if (!result.Any())
+        {
+            return NotFound();
+        }
+
+        return Ok(result);
+    }
+
+    [HttpGet("name/{name}")]
+    public IActionResult GetByName(string name)
+    {
+        var result = _roleRepository.GetByName(name);
         if (!result.Any())
         {
             return NotFound();

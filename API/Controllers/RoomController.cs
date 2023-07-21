@@ -1,5 +1,6 @@
 ﻿using API.Contracts;
 using API.Models;
+using API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -19,6 +20,18 @@ public class RoomController : ControllerBase
     public IActionResult GetAll()
     {
         var result = _roomRepository.GetAll();
+        if (!result.Any())
+        {
+            return NotFound();
+        }
+
+        return Ok(result);
+    }
+
+    [HttpGet("room/{room}")]
+    public IActionResult GetByName(string room)
+    {
+        var result = _roomRepository.GetByName(room);
         if (!result.Any())
         {
             return NotFound();
