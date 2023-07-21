@@ -27,6 +27,18 @@ public class UniversityController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("name/{name}")]
+    public IActionResult GetByName(string name)
+    {
+        var result = _universityRepository.GetByName(name);
+        if (!result.Any())
+        {
+            return NotFound();
+        }
+
+        return Ok(result);
+    }
+
     [HttpGet("{guid}")]
     public IActionResult GetByGuid(Guid guid)
     {

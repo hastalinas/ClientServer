@@ -2,11 +2,7 @@
 
 namespace API.Contracts;
 
-public interface IUniversityRepository
+public interface IUniversityRepository : IGeneralRepository<University> 
 {
-    IEnumerable<University> GetAll();
-    University? GetByGuid(Guid id);
-    University? Create(University university);
-    bool Update(University university);
-    bool Delete(University university);
+    IEnumerable<University> GetByName(string name);
 }
