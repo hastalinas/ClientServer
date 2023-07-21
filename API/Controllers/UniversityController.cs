@@ -7,7 +7,7 @@ using API.Services;
 namespace API.Controllers;
 
 [ApiController]
-[Route("api/univerities")]
+[Route("api/universities")]
 public class UniversityController : ControllerBase
 {
     private readonly UniveristyService _universityService;
