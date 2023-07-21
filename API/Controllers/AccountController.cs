@@ -28,6 +28,7 @@ public class AccountController : ControllerBase
         return Ok(result);
     }
 
+
     [HttpGet("{guid}")]
     public IActionResult GetByGuid(Guid guid)
     {
