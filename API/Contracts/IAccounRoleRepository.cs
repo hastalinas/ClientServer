@@ -2,11 +2,7 @@
 
 namespace API.Contracts;
 
-public interface IAccounRoleRepository
+public interface IAccounRoleRepository : IGeneralRepository<AccountRole>
 {
-    IEnumerable<AccountRole> GetAll();
-    AccountRole? GetByGuid(Guid id);
-    AccountRole? Create(AccountRole accountRole);
-    bool Update(AccountRole accountRole);
-    bool Delete(AccountRole accountRole);
+    //IEnumerable<AccountRole> GetByName(string name);
 }
