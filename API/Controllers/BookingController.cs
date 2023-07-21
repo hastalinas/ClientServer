@@ -28,6 +28,18 @@ public class BookingController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("remarks/{remarks}")]
+    public IActionResult GetByName(string remarks)
+    {
+        var result = _bookingRepository.GetByName(remarks);
+        if (!result.Any())
+        {
+            return NotFound();
+        }
+
+        return Ok(result);
+    }
+
     [HttpGet("{guid}")]
     public IActionResult GetByGuid(Guid guid)
     {

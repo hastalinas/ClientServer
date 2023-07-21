@@ -2,11 +2,7 @@
 
 namespace API.Contracts;
 
-public interface IBookingRepository
+public interface IBookingRepository : IGeneralRepository<Booking>
 {
-    IEnumerable<Booking> GetAll();
-    Booking? GetByGuid(Guid id);
-    Booking? Create(Booking booking);
-    bool Update(Booking booking);
-    bool Delete(Booking booking);
+    IEnumerable<Booking> GetByName(string remarks);
 }
