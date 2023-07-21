@@ -5,68 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Repositories;
 
-public class EmployeeRepository : IEmployeeRepository
+public class EmployeeRepository : GeneralRepository<Employee>, IEmployeeRepository
 {
-    private readonly BookingDBContext _context;
-    public EmployeeRepository(BookingDBContext context)
-    {
-        _context = context;
-    }
+    public EmployeeRepository(BookingDBContext context) : base(context) { }
 
-    public IEnumerable<Employee> GetAll()
+    public IEnumerable<Employee> GetByName(string name)
     {
-        return _context.Set<Employee>().ToList();
-    }
-
-    public Employee? GetByGuid(Guid guid)
-    {
-        var data = _context.Set<Employee>().Find(guid);
-        _context.ChangeTracker.Clear();
-        return data;
-    }
-
-    public Employee? Create(Employee employee)
-    {
-        try
-        {
-            _context.Set<Employee>()
-                    .Add(employee);
-            _context.SaveChanges();
-            return employee;
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    public bool Update(Employee employee)
-    {
-        try
-        {
-            _context.Entry(employee)
-                    .State = EntityState.Modified;
-            _context.SaveChanges();
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
-    public bool Delete(Employee employee)
-    {
-        try
-        {
-            _context.Set<Employee>()
-                    .Remove(employee);
-            _context.SaveChanges();
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
+        return _context.Set<Employee>()
+                       .Where(employee => employee.FirstName.Contains(name))
+                       .ToList();
     }
 }

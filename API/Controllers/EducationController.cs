@@ -28,10 +28,10 @@ public class EducationController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("name/{name}")]
-    public IActionResult GetByName(string name)
+    [HttpGet("major/{major}")]
+    public IActionResult GetByName(string major)
     {
-        var result = _educationRepository.GetByName(name);
+        var result = _educationRepository.GetByName(major);
         if (!result.Any())
         {
             return NotFound();

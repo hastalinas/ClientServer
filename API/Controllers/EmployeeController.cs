@@ -1,5 +1,6 @@
 ﻿using API.Contracts;
 using API.Models;
+using API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -19,6 +20,18 @@ public class EmployeeController : ControllerBase
     public IActionResult GetAll()
     {
         var result = _employeeRepository.GetAll();
+        if (!result.Any())
+        {
+            return NotFound();
+        }
+
+        return Ok(result);
+    }
+
+    [HttpGet("firstname/{firstname}")]
+    public IActionResult GetByName(string firstname)
+    {
+        var result = _employeeRepository.GetByName(firstname);
         if (!result.Any())
         {
             return NotFound();

@@ -2,7 +2,7 @@
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Controllers;
+namespace API.Repositories;
 
 public class GeneralRepository<TEntity> : IGeneralRepository<TEntity> where TEntity : class
 {
