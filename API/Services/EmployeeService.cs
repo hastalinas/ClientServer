@@ -75,7 +75,7 @@ public class EmployeeService
         }
 
         var result = _employeeRepository.Delete(employee);
-        return result ? -1  // employee is deleted
+        return result ? 1  // employee is deleted
             : 0; // employee failed to update
     }
 }

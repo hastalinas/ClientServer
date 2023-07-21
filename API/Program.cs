@@ -24,8 +24,14 @@ builder.Services.AddScoped<IAccounRoleRepository, AccountRoleRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
 // Add services to container
-builder.Services.AddScoped<UniveristyService>();
+builder.Services.AddScoped<UniversityService>();
+builder.Services.AddScoped<RoomService>();
+builder.Services.AddScoped<RoleService>();
 builder.Services.AddScoped<EmployeeService>();
+builder.Services.AddScoped<EducationService>();
+builder.Services.AddScoped<BookingService>();
+builder.Services.AddScoped<AccountRoleService>();
+builder.Services.AddScoped<AccountService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

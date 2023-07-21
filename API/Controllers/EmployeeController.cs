@@ -86,6 +86,7 @@ public class EmployeeController : ControllerBase
     public IActionResult Delete(Guid guid)
     {
         var result = _employeeService.Delete(guid);
+
         if (result is -1)
         {
             return NotFound("Guid is not found");

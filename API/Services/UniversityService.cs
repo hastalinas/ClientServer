@@ -4,11 +4,11 @@ using API.DTOs.Universities;
 
 namespace API.Services;
 
-public class UniveristyService
+public class UniversityService
 {
     private readonly IUniversityRepository _universityRepository;
 
-    public UniveristyService(IUniversityRepository universityRepository)
+    public UniversityService(IUniversityRepository universityRepository)
     {
         _universityRepository = universityRepository;
     }
