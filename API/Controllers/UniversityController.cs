@@ -10,9 +10,9 @@ namespace API.Controllers;
 [Route("api/universities")]
 public class UniversityController : ControllerBase
 {
-    private readonly UniveristyService _universityService;
+    private readonly UniversityService _universityService;
 
-    public UniversityController(UniveristyService universityService)
+    public UniversityController(UniversityService universityService)
     {
         _universityService = universityService;
     }
