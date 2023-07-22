@@ -15,13 +15,13 @@ public class NewEducationDto
     {
         return new Education
         {
-            Guid = Guid.NewGuid(),
+            Guid = newEducationDto.Guid,// new Guid(),
             Major = newEducationDto.Major,
             Degree = newEducationDto.Degree,
             GPA = newEducationDto.GPA,
+            UniversityGuid = newEducationDto.UniversityGuid,
             CreatedDate = DateTime.Now,
             ModifiedDate = DateTime.Now,
-            UniversityGuid = newEducationDto.UniversityGuid
         };
     }
 

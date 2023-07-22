@@ -23,7 +23,8 @@ public class BookingDto
             Status = bookingDto.Status,
             Remarks = bookingDto.Remarks,
             RoomGuid = bookingDto.RoomGuid,
-            EmployeeGuid = bookingDto.EmployeeGuid
+            EmployeeGuid = bookingDto.EmployeeGuid,
+            ModifiedDate = DateTime.Now
         };
     }
 

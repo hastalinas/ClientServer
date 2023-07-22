@@ -19,7 +19,8 @@ public class EducationDto
             Major = educationDto.Major,
             Degree = educationDto.Degree,
             GPA = educationDto.GPA,
-            UniversityGuid = educationDto.UniversityGuid
+            UniversityGuid = educationDto.UniversityGuid,
+            ModifiedDate = DateTime.Now
         };
     }
 
