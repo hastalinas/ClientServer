@@ -1,5 +1,7 @@
 ﻿using API.Models;
-namespace API.DTOs.Education;
+
+
+namespace API.DTOs.Educations;
 
 public class NewEducationDto
 {
@@ -7,23 +9,25 @@ public class NewEducationDto
     public string Major { get; set; }
     public string Degree { get; set; }
     public float GPA { get; set; }
-    public string UniversityGuid { get; set; }
+    public Guid UniversityGuid { get; set; }
 
-    public static implicit operator Education(EducationDto educationDto)
+    public static implicit operator Education(NewEducationDto newEducationDto)
     {
         return new Education
         {
-            Guid = educationDto.Guid,
-            Major = educationDto.Major,
-            Degree = educationDto.Degree,
-            GPA = educationDto.GPA,
-            UniversityGuid = educationDto.UniversityGuid
+            Guid = Guid.NewGuid(),
+            Major = newEducationDto.Major,
+            Degree = newEducationDto.Degree,
+            GPA = newEducationDto.GPA,
+            CreatedDate = DateTime.Now,
+            ModifiedDate = DateTime.Now,
+            UniversityGuid = newEducationDto.UniversityGuid
         };
     }
 
-    public static explicit operator EducationDto(Education education)
+    public static explicit operator NewEducationDto(Education education)
     {
-        return new EducationDto
+        return new NewEducationDto
         {
             Guid = education.Guid,
             Major = education.Major,

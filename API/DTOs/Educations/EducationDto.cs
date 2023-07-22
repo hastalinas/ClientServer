@@ -1,6 +1,7 @@
 ﻿using API.Models;
 
-namespace API.DTOs.Education;
+
+namespace API.DTOs.Educations;
 
 public class EducationDto
 {
@@ -8,7 +9,7 @@ public class EducationDto
     public string Major { get; set; }
     public string Degree { get; set; }
     public float GPA { get; set; }
-    public string UniversityGuid { get; set; }
+    public Guid UniversityGuid { get; set; }
 
     public static implicit operator Education(EducationDto educationDto)
     {

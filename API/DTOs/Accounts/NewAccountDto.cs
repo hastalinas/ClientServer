@@ -3,7 +3,6 @@ namespace API.DTOs.Accounts;
 
 public class NewAccountDto
 {
-    //public Guid Guid { get; set; }
     public string Password { get; set; }
     public int OTP { get; set; }
     public bool IsUsed { get; set; }
@@ -29,7 +28,6 @@ public class NewAccountDto
     {
         return new NewAccountDto
         {
-            Guid = account.Guid,
             OTP = account.Otp,
             Password = account.Password,
             IsUsed = account.IsUsed,

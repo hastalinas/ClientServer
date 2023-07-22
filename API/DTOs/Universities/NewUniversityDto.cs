@@ -20,7 +20,7 @@ public class NewUniversityDto
         };
     }
 
-    // Pos
+    
     public static explicit operator NewUniversityDto(University university)
     {
         return new NewUniversityDto
