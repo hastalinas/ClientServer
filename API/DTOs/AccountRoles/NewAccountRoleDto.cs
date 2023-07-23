@@ -18,4 +18,13 @@ public class NewAccountRoleDto
             ModifiedDate = DateTime.Now
         };
     }
+
+    public static explicit operator NewAccountRoleDto(AccountRole AccountRole)
+    {
+        return new NewAccountRoleDto
+        {
+            AccountGuid = AccountRole.AccountGuid,
+            RoleGuid = AccountRole.RoleGuid
+        };
+    }
 }
