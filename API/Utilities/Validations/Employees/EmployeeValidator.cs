@@ -10,7 +10,7 @@ public class EmployeeValidator : AbstractValidator<EmployeeDto>
     public EmployeeValidator(IEmployeeRepository employeeRepository)
     {
         _employeeRepository = employeeRepository;
-        RuleFor(e => e.Nik).NotEmpty().MaximumLength(6).WithMessage("Max charcter 6");
+        //RuleFor(e => e.Nik).NotEmpty().MaximumLength(5).WithMessage("Max charcter 5");
 
         RuleFor(e => e.Firstname).NotEmpty();
 
@@ -24,10 +24,13 @@ public class EmployeeValidator : AbstractValidator<EmployeeDto>
                                         .EmailAddress().WithMessage("Email is not valid")
                                         .Must(IsDuplicateValue).WithMessage("Email already exist");
 
-        RuleFor(e => e.Hiringdate).NotEmpty();
+        RuleFor(e => e.Hiringdate).NotEmpty().LessThanOrEqualTo(DateTime.Now.AddMonths(-3));
 
-        RuleFor(e => e.Phone).NotEmpty()
-            .MaximumLength(13).Matches(@"^\+[0-9]");
+        RuleFor(e => e.Phone)
+            .NotEmpty()
+            .MaximumLength(20)
+            .Matches("^(^\\+62|62|^08)(\\d{3,4}-?){2}\\d{3,4}$")
+            .Must(IsDuplicateValue).WithMessage("Phone Number already exists");
     }
 
     private bool IsDuplicateValue(string value)

@@ -11,12 +11,12 @@ public class NewEmployeeValidator : AbstractValidator<NewEmployeeDto>
     public NewEmployeeValidator(IEmployeeRepository employeeRepository)
     {
         _employeeRepository = employeeRepository;
-        RuleFor(e => e.Nik).NotEmpty().MaximumLength(6);
+        //RuleFor(e => e.Nik).NotEmpty().MaximumLength(5);
 
         RuleFor(e => e.Firstname).NotEmpty();
 
         RuleFor(e => e.Birtdate).NotEmpty()
-            .LessThanOrEqualTo(DateTime.Now.AddYears(-10));
+            .LessThanOrEqualTo(DateTime.Now.AddYears(-10)).WithMessage("Age not availailable");
 
         RuleFor(e => e.Gender).NotNull()
             .IsInEnum();
@@ -25,10 +25,13 @@ public class NewEmployeeValidator : AbstractValidator<NewEmployeeDto>
                                         .EmailAddress().WithMessage("Email is not valid")
                                         .Must(IsDuplicateValue).WithMessage("Email already exist");
 
-        RuleFor(e => e.Hiringdate).NotEmpty();
+        RuleFor(e => e.Hiringdate).NotEmpty().LessThanOrEqualTo(DateTime.Now.AddMonths(-3));
 
-        RuleFor(e => e.Phone).NotEmpty()
-            .MaximumLength(13).Matches(@"^\+[0-9]");
+        RuleFor(e => e.Phone)
+            .NotEmpty()
+            .MaximumLength(20)
+            .Matches("^(^\\+62|62|^08)(\\d{3,4}-?){2}\\d{3,4}$")
+            .Must(IsDuplicateValue).WithMessage("Phone Number already exists");
     }
 
     private bool IsDuplicateValue(string arg)
