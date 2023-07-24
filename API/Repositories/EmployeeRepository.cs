@@ -15,4 +15,11 @@ public class EmployeeRepository : GeneralRepository<Employee>, IEmployeeReposito
                        .Where(employee => employee.FirstName.Contains(name))
                        .ToList();
     }
+
+    public bool isNotExist(string value)
+    {
+        return _context.Set<Employee>()
+                      .SingleOrDefault(e => e.Email.Contains(value) ||
+                                       e.PhoneNumber.Contains(value)) is null;
+    }
 }

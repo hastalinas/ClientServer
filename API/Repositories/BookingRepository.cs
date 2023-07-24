@@ -15,4 +15,5 @@ public class BookingRepository : GeneralRepository<Booking>, IBookingRepository
                        .Where(booking => booking.Remarks.Contains(remarks))
                        .ToList();
     }
+
 }

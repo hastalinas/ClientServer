@@ -15,4 +15,9 @@ public class RoleRepository : GeneralRepository<Role>, IRoleRepository
                        .Where(role => role.Name.Contains(name))
                        .ToList();
     }
+
+    public bool isNotExist(string value)
+    {
+        return _context.Set<Role>().SingleOrDefault(role => role.Name.Contains(value)) is null;
+    }
 }

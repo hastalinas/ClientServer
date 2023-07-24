@@ -30,37 +30,44 @@ public class BookingDBContext : DbContext
         // Many education with one university (N:1)
         modelBuilder.Entity<Education>().HasOne(e => e.University)
                                         .WithMany(u => u.Educations)
-                                        .HasForeignKey(u => u.UniversityGuid);
+                                        .HasForeignKey(u => u.UniversityGuid)
+                                        .OnDelete(DeleteBehavior.Restrict);
 
         // employee with education
         modelBuilder.Entity<Education>().HasOne(education => education.Employee)
                                         .WithOne(employee => employee.Education)
-                                        .HasForeignKey<Education>(education => education.Guid);
+                                        .HasForeignKey<Education>(education => education.Guid)
+                                        .OnDelete(DeleteBehavior.Restrict);
 
         // Many booking with one room
         modelBuilder.Entity<Booking>().HasOne(r => r.Room)
                                       .WithMany(b => b.Bookings)
-                                      .HasForeignKey(b => b.RoomGuid);
+                                      .HasForeignKey(b => b.RoomGuid)
+                                      .OnDelete(DeleteBehavior.Restrict);
 
         // booking with employee
         modelBuilder.Entity<Booking>().HasOne(e => e.Employee)
                                       .WithMany(b => b.Bookings)
-                                      .HasForeignKey(b => b.EmployeeGuid);
+                                      .HasForeignKey(b => b.EmployeeGuid)
+                                      .OnDelete(DeleteBehavior.Restrict);
 
         // account with employee -> account fk
         modelBuilder.Entity<Account>().HasOne(account => account.Employee)
                                       .WithOne(employee => employee.Account)
-                                      .HasForeignKey<Account>(account => account.Guid);
+                                      .HasForeignKey<Account>(account => account.Guid)
+                                      .OnDelete(DeleteBehavior.Restrict);
 
         // account with account role
         modelBuilder.Entity<Account>().HasMany(ac => ac.AccountRoles)
                                       .WithOne(a => a.Account)
-                                      .HasForeignKey(a => a.AccountGuid);
+                                      .HasForeignKey(a => a.AccountGuid)
+                                      .OnDelete(DeleteBehavior.Restrict);
 
         // account role with role
         modelBuilder.Entity<AccountRole>().HasOne(r => r.Role)
                                           .WithMany(a => a.AccountRoles)
-                                          .HasForeignKey(a => a.RoleGuid);
+                                          .HasForeignKey(a => a.RoleGuid)
+                                          .OnDelete(DeleteBehavior.Restrict);
     }
 }
 

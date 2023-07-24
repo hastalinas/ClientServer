@@ -15,4 +15,9 @@ public class RoomRepository : GeneralRepository<Room>, IRoomRepository
                        .Where(room => room.Name.Contains(floor))
                        .ToList();
     }
+
+    public bool isNotExist(string value)
+    {
+        return _context.Set<Room>().SingleOrDefault(r => r.Name.Contains(value)) is null;
+    }
 }
