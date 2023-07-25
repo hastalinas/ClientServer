@@ -20,11 +20,16 @@ public class EmployeeRepository : GeneralRepository<Employee>, IEmployeeReposito
     {
         return _context.Set<Employee>().SingleOrDefault(e => e.PhoneNumber.Contains(value) || e.Email.Contains(value)) is null;
         //return _context.Set<Employee>().SingleOrDefault(e => e.Email == value || e.PhoneNumber == value) is null;
-
     }
 
     public string GetAutoNik()
     {
         return _context.Set<Employee>().ToList().LastOrDefault()?.Nik;
     }
+
+    public Employee? GetByEmail(string email)
+    {
+        return _context.Set<Employee>().SingleOrDefault(e => e.Email.Contains(email));
+    }
+
 }

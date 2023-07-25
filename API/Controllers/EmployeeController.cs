@@ -1,7 +1,5 @@
 ﻿using API.Contracts;
-using API.DTOs.Accounts;
 using API.DTOs.Employees;
-using API.DTOs.Universities;
 using API.Models;
 using API.Services;
 using API.Utilities.Handlers;
@@ -106,9 +104,9 @@ public class EmployeeController : ControllerBase
     }
 
     [HttpPut]
-    public IActionResult Update(EmployeeDto employeeDto)
+    public IActionResult Update(UpdateEmployeeNikDto employeeNikDto)
     {
-        var result = _employeeService.Update(employeeDto);
+        var result = _employeeService.Update(employeeNikDto);
         if (result is -1)
         {
             return NotFound("Guid is not found");

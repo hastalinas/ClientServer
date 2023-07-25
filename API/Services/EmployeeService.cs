@@ -54,18 +54,21 @@ public class EmployeeService
         return (EmployeeDto)employee;
     }
 
-    public int Update(EmployeeDto employeeDto)
+    public int Update(UpdateEmployeeNikDto employeeNikDto)
     {
-        var employee = _employeeRepository.GetByGuid(employeeDto.Guid);
+        var employee = _employeeRepository.GetByGuid(employeeNikDto.Guid);
+        //var existingEmployee = _employeeRepository.FirstOrDefault(e => e.Id == employee.Id);
         if (employee is null)
         {
             return -1; // employee is null or not found
         }
 
-        Employee toUpdate = employeeDto;
+        Employee toUpdate = employeeNikDto;
         toUpdate.CreatedDate = employee.CreatedDate;
-        var result = _employeeRepository.Update(toUpdate);
+        toUpdate.Nik = _employeeRepository.GetByGuid(employeeNikDto.Guid).Nik;
 
+        var result = _employeeRepository.Update(toUpdate);
+        
         return result ? 1 // employee is updated
             : 0; // employee failed to update
     }

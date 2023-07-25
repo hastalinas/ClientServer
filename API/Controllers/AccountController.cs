@@ -21,6 +21,35 @@ public class AccountController : ControllerBase
         _accountService = accountService;
     }
 
+    [HttpPost("login")]
+    public IActionResult Login(LoginDto loginDto)
+    {
+        var result = _accountService.Login(loginDto);
+
+        if (result is 0)
+        {
+            return NotFound(new ResponseHandler<LoginDto>
+            {
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Email or Password is incorrect"
+            });
+        }
+
+        return Ok(new ResponseHandler<LoginDto>
+        {
+            Code = StatusCodes.Status200OK,
+            Status = HttpStatusCode.OK.ToString(),
+            Message = "Login Success"
+        });
+    }
+
+/*    [HttpPost("register")]
+    public IActionResult register()
+    {
+
+    }*/
+
     [HttpGet]
     public IActionResult GetAll()
     {
