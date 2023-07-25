@@ -25,13 +25,13 @@ public class NewEmployeeValidator : AbstractValidator<NewEmployeeDto>
                                         .EmailAddress().WithMessage("Email is not valid")
                                         .Must(IsDuplicateValue).WithMessage("Email already exist");
 
-        RuleFor(e => e.Hiringdate).NotEmpty().LessThanOrEqualTo(DateTime.Now.AddMonths(-3));
+        RuleFor(e => e.Hiringdate).NotEmpty();
 
         RuleFor(e => e.Phone)
             .NotEmpty()
-            .MaximumLength(20)
+            .MaximumLength(15)
             .Matches("^(^\\+62|62|^08)(\\d{3,4}-?){2}\\d{3,4}$")
-            .Must(IsDuplicateValue).WithMessage("Phone Number already exists");
+            .Must(IsDuplicateValue).WithMessage("Phone number is already exists");
     }
 
     private bool IsDuplicateValue(string arg)

@@ -25,6 +25,7 @@ public class EmployeeDto
             LastName = employeeDto.Lastname,
             BirthDate = employeeDto.Birtdate,
             Gender = employeeDto.Gender,
+            HiringDate = employeeDto.Hiringdate,
             Email = employeeDto.Email,
             PhoneNumber = employeeDto.Phone,
             ModifiedDate = DateTime.Now
@@ -40,6 +41,7 @@ public class EmployeeDto
             Firstname = employee.FirstName,
             Lastname = employee.LastName,
             Birtdate = employee.BirthDate,
+            Hiringdate = employee.HiringDate,
             Gender = employee.Gender,
             Email = employee.Email,
             Phone = employee.PhoneNumber,

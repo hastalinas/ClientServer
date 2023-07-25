@@ -18,8 +18,8 @@ public class EmployeeRepository : GeneralRepository<Employee>, IEmployeeReposito
 
     public bool isNotExist(string value)
     {
-        //return _context.Set<Employee>().SingleOrDefault(e => e.Email.Contains(value) || e.PhoneNumber.Contains(value)) is null;
-        return _context.Set<Employee>().SingleOrDefault(e => e.Email == value || e.PhoneNumber == value) is null;
+        return _context.Set<Employee>().SingleOrDefault(e => e.PhoneNumber.Contains(value) || e.Email.Contains(value)) is null;
+        //return _context.Set<Employee>().SingleOrDefault(e => e.Email == value || e.PhoneNumber == value) is null;
 
     }
 

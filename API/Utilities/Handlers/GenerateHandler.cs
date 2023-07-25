@@ -2,7 +2,7 @@
 
 public class GenerateHandler
 {
-    private static int lastNik = 11119; // NIK terakhir, ganti dengan NIK terakhir yang sesuai
+    private static int lastNik = 11111; // NIK terakhir, ganti dengan NIK terakhir yang sesuai
 
     public static string Nik(string? nik = null)
     {
