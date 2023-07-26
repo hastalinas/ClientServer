@@ -34,8 +34,8 @@ public class NewEmployeeValidator : AbstractValidator<NewEmployeeDto>
             .Must(IsDuplicateValue).WithMessage("Phone number is already exists");
     }
 
-    private bool IsDuplicateValue(string arg)
+    private bool IsDuplicateValue(string value)
     {
-        return _employeeRepository.isNotExist(arg);
+        return _employeeRepository.isNotExist(value);
     }
 }

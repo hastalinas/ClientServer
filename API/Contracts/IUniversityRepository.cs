@@ -5,6 +5,6 @@ namespace API.Contracts;
 public interface IUniversityRepository : IGeneralRepository<University> 
 {
     IEnumerable<University> GetByName(string name);
-
+    Guid GetLastUniversityGuid();
     bool isNotExist(string value);
 }

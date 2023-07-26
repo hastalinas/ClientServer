@@ -48,7 +48,7 @@ public class AccountController : ControllerBase
     public IActionResult Register(RegisterDto registerDto)
     {
         var result = _accountService.Register(registerDto);
-        if (result is 0)
+        if (result is null)
         {
             return NotFound(new ResponseHandler<RegisterDto>
             {
@@ -64,6 +64,49 @@ public class AccountController : ControllerBase
             Message = "Register Success"
         });
     }
+
+/*    [HttpPost("ForgotPassword")]
+    public IActionResult ForgotPassword([FromBody] ForgotPasswordRequest request)
+    {
+        // Simulate generating a random 6-digit OTP
+        string otp = GenerateRandomOTP();
+
+        OTPData.Add(request.Email, new OTPInfo { OTP = otp, ExpirationTime = DateTime.UtcNow.AddMinutes(5) });
+
+        // Return the OTP in the response body
+        return Ok(new { OTP = otp });
+    }
+
+
+    [HttpPost("ChangePassword")]
+    public IActionResult ChangePassword([FromBody] ChangePasswordRequest request)
+    {
+        // Check if the OTP exists for the given email
+        if (!OTPData.TryGetValue(request.Email, out var otpInfo) || otpInfo.OTP != request.OTP)
+        {
+            return BadRequest("Invalid OTP");
+        }
+
+        if (otpInfo.Used)
+        {
+            return BadRequest("OTP has already been used");
+        }
+
+        if (DateTime.UtcNow > otpInfo.ExpirationTime)
+        {
+            return BadRequest("OTP has expired");
+        }
+
+        if (request.NewPassword != request.ConfirmPassword)
+        {
+            return BadRequest("New password and confirm password do not match");
+        }
+
+
+        otpInfo.Used = true;
+
+        return Ok("Password changed successfully");
+    }*/
 
     [HttpGet]
     public IActionResult GetAll()

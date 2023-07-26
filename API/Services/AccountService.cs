@@ -1,7 +1,11 @@
 ﻿using API.Contracts;
 using API.DTOs.Accounts;
+using API.DTOs.Educations;
+using API.DTOs.Employees;
+using API.DTOs.Universities;
 using API.Models;
 using API.Repositories;
+using API.Utilities.Handlers;
 
 namespace API.Services;
 
@@ -12,10 +16,13 @@ public class AccountService
     private readonly IEducationRepository _educationRepository;
     private readonly IUniversityRepository _universityRepository;
 
-    public AccountService(IAccountRepository accountRepository, IEmployeeRepository employeeRepository)
+    public AccountService(IAccountRepository accountRepository, IEmployeeRepository employeeRepository, IUniversityRepository universityRepository, IEducationRepository educationRepository)
     {
         _accountRepository = accountRepository;
         _employeeRepository = employeeRepository;
+        _educationRepository = educationRepository;
+        _universityRepository = universityRepository;
+
     }
 
     public int Login(LoginDto loginDto)
@@ -35,52 +42,59 @@ public class AccountService
         return 0;
     }
 
-    public int Register(RegisterDto registerDto)
+    public RegisterDto? Register(RegisterDto registerDto)
     {
-        try
+        Employee createEmployee = new NewEmployeeDto
         {
-            var account = new Account
-            {
-                Password = registerDto.Password
-            };
-            var employee = new Employee
-            {
-                Guid = new Guid(),
-                FirstName = registerDto.FirstName,
-                LastName = registerDto.LastName,
-                Email = registerDto.Email,
-                PhoneNumber = registerDto.PhoneNumber,
-                BirthDate = registerDto.BirthDate,
-                HiringDate = registerDto.HiringDate,
-                Gender = registerDto.Gender,
-            };
-            var university = new University
-            {
-                Name = registerDto.UniversitasName
-            };
-            var education = new Education
-            {
-                Degree = registerDto.Degree,
-                Major = registerDto.Major,
-                GPA = registerDto.GPA
-            };
-            employee.Account = account;
-            education.University = university;
-            education.Employee = employee;
+            Firstname = registerDto.FirstName,
+            Lastname = registerDto.LastName,
+            Birtdate = registerDto.BirthDate,
+            Gender = registerDto.Gender,
+            Hiringdate = registerDto.HiringDate,
+            Email = registerDto.Email,
+            Phone = registerDto.PhoneNumber
+        };
 
-            var createemployee = _employeeRepository.Create(employee);
-            var createuniversity = _universityRepository.Create(university);
-            var createeducation = _educationRepository.Create(education);
-            var createaccount = _accountRepository.Create(account);
-
-            return 1;
-        }
-        catch
+        createEmployee.Nik = GenerateHandler.Nik(_employeeRepository.GetAutoNik());
+        var employeeResult = _employeeRepository.Create(createEmployee);
+        
+        var universityResult = _universityRepository.Create(new NewUniversityDto
         {
-            return 0;
+            Code = registerDto.UniversityCode,
+            Name = registerDto.UniversityCode
+        });
+
+        var educationResullt = _educationRepository.Create(new NewEducationDto
+        {
+            Guid = _employeeRepository.GetLastEmployeeGuid(),
+            Degree = registerDto.Degree,
+            Major = registerDto.Major,
+            GPA = registerDto.GPA,
+            UniversityGuid = _universityRepository.GetLastUniversityGuid()
+        });
+
+        var accountResult = _accountRepository.Create(new NewAccountDto
+        {
+            Guid = _employeeRepository.GetLastEmployeeGuid(),
+            IsUsed = true,
+            ExpiredTime = DateTime.Now.AddYears(3),
+            OTP = registerDto.OTP,
+            Password = registerDto.Password,
+        });
+
+        if (employeeResult is null || universityResult is null || educationResullt is null || accountResult is null)
+        {
+            return null;
         }
+
+        return (RegisterDto)registerDto;
 
     }
+
+/*    public ForgotPasswordDto ForgotPassword(ForgotPasswordDto forgotPasswordDto)
+    {
+
+    }*/
     public IEnumerable<AccountDto> GetAll()
     {
         var accounts = _accountRepository.GetAll();
