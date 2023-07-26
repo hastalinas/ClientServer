@@ -91,10 +91,41 @@ public class AccountService
 
     }
 
-/*    public ForgotPasswordDto ForgotPassword(ForgotPasswordDto forgotPasswordDto)
+    public int ForgotPasswordDto(ForgotPasswordDto forgotPasswordDto)
     {
+        var employee = _employeeRepository.GetByEmail(forgotPasswordDto.Email);
+        if (employee is null)
+        {
+            return 0; // Email not found
+        }
 
-    }*/
+        var account = _accountRepository.GetByGuid(employee.Guid);
+        if (account is null)
+        {
+            return -1;
+        }
+
+        var otp = new Random().Next(111111, 999999);
+        var isUpdated = _accountRepository.Update(new Account
+        {
+            Guid = account.Guid,
+            Password = account.Password,
+            ExpiredTime = DateTime.Now.AddMinutes(5),
+            Otp = otp,
+            IsUsed = false,
+            CreatedDate = account.CreatedDate,
+            ModifiedDate = DateTime.Now
+        });
+
+        if (!isUpdated)
+        { 
+            return -1; 
+        }
+
+        forgotPasswordDto.Email = $"{otp}";
+        return 1;
+
+    }
     public IEnumerable<AccountDto> GetAll()
     {
         var accounts = _accountRepository.GetAll();

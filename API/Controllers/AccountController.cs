@@ -65,48 +65,65 @@ public class AccountController : ControllerBase
         });
     }
 
-/*    [HttpPost("ForgotPassword")]
-    public IActionResult ForgotPassword([FromBody] ForgotPasswordRequest request)
+    [HttpPost("forgotpassword")]
+    public IActionResult ForgotPassword(ForgotPasswordDto forgotPasswordDto)
     {
-        // Simulate generating a random 6-digit OTP
-        string otp = GenerateRandomOTP();
+        var isUpdated = _accountService.ForgotPasswordDto(forgotPasswordDto);
+        if (isUpdated == 0)
+            return NotFound(new ResponseHandler<ForgotPasswordDto>
+            {
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Email not found"
+            });
 
-        OTPData.Add(request.Email, new OTPInfo { OTP = otp, ExpirationTime = DateTime.UtcNow.AddMinutes(5) });
+        if (isUpdated is -1)
+            return StatusCode(StatusCodes.Status500InternalServerError, new ResponseHandler<ForgotPasswordDto>
+            {
+                Code = StatusCodes.Status500InternalServerError,
+                Status = HttpStatusCode.InternalServerError.ToString(),
+                Message = "Error retrieving data from the database"
+            });
 
-        // Return the OTP in the response body
-        return Ok(new { OTP = otp });
+        return Ok(new ResponseHandler<ForgotPasswordDto>
+        {
+            Code = StatusCodes.Status200OK,
+            Status = HttpStatusCode.OK.ToString(),
+            Message = "Otp has been sent to your email",
+            Data = forgotPasswordDto
+        });
     }
 
 
-    [HttpPost("ChangePassword")]
-    public IActionResult ChangePassword([FromBody] ChangePasswordRequest request)
-    {
-        // Check if the OTP exists for the given email
-        if (!OTPData.TryGetValue(request.Email, out var otpInfo) || otpInfo.OTP != request.OTP)
+    [HttpPost("changepassword")]
+ /*       public IActionResult ChangePassword([FromBody] ChangePasswordRequest request)
         {
-            return BadRequest("Invalid OTP");
-        }
+            // Check if the OTP exists for the given email
+            if (!OTPData.TryGetValue(request.Email, out var otpInfo) || otpInfo.OTP != request.OTP)
+            {
+                return BadRequest("Invalid OTP");
+            }
 
-        if (otpInfo.Used)
-        {
-            return BadRequest("OTP has already been used");
-        }
+            if (otpInfo.Used)
+            {
+                return BadRequest("OTP has already been used");
+            }
 
-        if (DateTime.UtcNow > otpInfo.ExpirationTime)
-        {
-            return BadRequest("OTP has expired");
-        }
+            if (DateTime.UtcNow > otpInfo.ExpirationTime)
+            {
+                return BadRequest("OTP has expired");
+            }
 
-        if (request.NewPassword != request.ConfirmPassword)
-        {
-            return BadRequest("New password and confirm password do not match");
-        }
+            if (request.NewPassword != request.ConfirmPassword)
+            {
+                return BadRequest("New password and confirm password do not match");
+            }
 
 
-        otpInfo.Used = true;
+            otpInfo.Used = true;
 
-        return Ok("Password changed successfully");
-    }*/
+            return Ok("Password changed successfully");
+        }*/
 
     [HttpGet]
     public IActionResult GetAll()

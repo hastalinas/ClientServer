@@ -2,6 +2,7 @@
 using API.Models;
 using API.DTOs.Employees;
 using API.Utilities.Handlers;
+using API.DTOs.Accounts;
 
 namespace API.Services;
 
@@ -86,5 +87,20 @@ public class EmployeeService
             : 0; // employee failed to update
     }
 
-    
+    public OtpResponseDto? GetByEmail(string email)
+    {
+        var account = _employeeRepository.GetAll()
+            .FirstOrDefault(e => e.Email.Contains(email));
+
+        if (account != null)
+        {
+            return new OtpResponseDto
+            {
+                Email = account.Email,
+                Guid = account.Guid
+            };
+        }
+
+        return null;
+    }
 }
