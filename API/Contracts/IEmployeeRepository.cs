@@ -11,6 +11,7 @@ public interface IEmployeeRepository : IGeneralRepository<Employee>
     bool isNotExist(string value);
     string GetAutoNik();
     Employee? GetByEmail(string email);
+    Employee? CheckEmail(string email);
     Guid GetLastEmployeeGuid();
     //bool isSameGuid(Guid guid);
 }

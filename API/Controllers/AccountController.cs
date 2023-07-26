@@ -96,34 +96,58 @@ public class AccountController : ControllerBase
 
 
     [HttpPost("changepassword")]
- /*       public IActionResult ChangePassword([FromBody] ChangePasswordRequest request)
+    public IActionResult UpdatePassword(ChangePasswordDto changePasswordDto)
+    {
+        var update = _accountService.ChangePassword(changePasswordDto);
+        if (update is -1)
         {
-            // Check if the OTP exists for the given email
-            if (!OTPData.TryGetValue(request.Email, out var otpInfo) || otpInfo.OTP != request.OTP)
+            return NotFound(new ResponseHandler<ChangePasswordDto>
             {
-                return BadRequest("Invalid OTP");
-            }
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Email not found"
+            });
+        }
 
-            if (otpInfo.Used)
+        if (update is 0)
+        {
+            return NotFound(new ResponseHandler<ChangePasswordDto>
             {
-                return BadRequest("OTP has already been used");
-            }
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "OTP doesn't match"
+            });
+        }
 
-            if (DateTime.UtcNow > otpInfo.ExpirationTime)
+        if (update is 1)
+        {
+            return NotFound(new ResponseHandler<ChangePasswordDto>
             {
-                return BadRequest("OTP has expired");
-            }
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "OTP is used"
+            });
+        }
 
-            if (request.NewPassword != request.ConfirmPassword)
+        if (update is 2)
+        {
+            return NotFound(new ResponseHandler<ChangePasswordDto>
             {
-                return BadRequest("New password and confirm password do not match");
-            }
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Otp Already Expired"
+            });
+        }
+
+        return Ok(new ResponseHandler<ChangePasswordDto>
+        {
+            Code = StatusCodes.Status200OK,
+            Status = HttpStatusCode.OK.ToString(),
+            Message = "Succesfuly Updated"
+        });
 
 
-            otpInfo.Used = true;
-
-            return Ok("Password changed successfully");
-        }*/
+    }
 
     [HttpGet]
     public IActionResult GetAll()
