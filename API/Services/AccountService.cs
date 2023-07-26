@@ -9,6 +9,9 @@ public class AccountService
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IEmployeeRepository _employeeRepository;
+    private readonly IEducationRepository _educationRepository;
+    private readonly IUniversityRepository _universityRepository;
+
     public AccountService(IAccountRepository accountRepository, IEmployeeRepository employeeRepository)
     {
         _accountRepository = accountRepository;
@@ -18,20 +21,65 @@ public class AccountService
     public int Login(LoginDto loginDto)
     {
         var getEmployee = _employeeRepository.GetByEmail(loginDto.Email);
-
         if (getEmployee is null)
         {
             return 0; // Employee not found
         }
 
         var getAccount = _accountRepository.GetByGuid(getEmployee.Guid);
-
         if (getAccount.Password == loginDto.Password)
         {
             return 1; // Login success
         }
 
         return 0;
+    }
+
+    public int Register(RegisterDto registerDto)
+    {
+        try
+        {
+            var account = new Account
+            {
+                Password = registerDto.Password
+            };
+            var employee = new Employee
+            {
+                Guid = new Guid(),
+                FirstName = registerDto.FirstName,
+                LastName = registerDto.LastName,
+                Email = registerDto.Email,
+                PhoneNumber = registerDto.PhoneNumber,
+                BirthDate = registerDto.BirthDate,
+                HiringDate = registerDto.HiringDate,
+                Gender = registerDto.Gender,
+            };
+            var university = new University
+            {
+                Name = registerDto.UniversitasName
+            };
+            var education = new Education
+            {
+                Degree = registerDto.Degree,
+                Major = registerDto.Major,
+                GPA = registerDto.GPA
+            };
+            employee.Account = account;
+            education.University = university;
+            education.Employee = employee;
+
+            var createemployee = _employeeRepository.Create(employee);
+            var createuniversity = _universityRepository.Create(university);
+            var createeducation = _educationRepository.Create(education);
+            var createaccount = _accountRepository.Create(account);
+
+            return 1;
+        }
+        catch
+        {
+            return 0;
+        }
+
     }
     public IEnumerable<AccountDto> GetAll()
     {
@@ -91,6 +139,7 @@ public class AccountService
     public int Delete(Guid guid)
     {
         var account = _accountRepository.GetByGuid(guid);
+        //var getcreateemployee = _employeeRepository.Create();
         if (account is null)
         {
             return -1; // account is null or not found;

@@ -32,4 +32,18 @@ public class EmployeeRepository : GeneralRepository<Employee>, IEmployeeReposito
         return _context.Set<Employee>().SingleOrDefault(e => e.Email.Contains(email));
     }
 
+
+    // implementasi dari IEmployeeRepository
+/*    public bool IsSameGuid(Guid guid)
+    {
+        Employee? employee = GetByGuid(guid);
+        if (employee is null)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }*/
 }

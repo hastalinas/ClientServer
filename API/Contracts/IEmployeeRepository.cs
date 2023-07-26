@@ -9,4 +9,5 @@ public interface IEmployeeRepository : IGeneralRepository<Employee>
     bool isNotExist(string value);
     string GetAutoNik();
     Employee? GetByEmail(string email);
+    //bool isSameGuid(Guid guid);
 }

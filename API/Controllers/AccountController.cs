@@ -44,11 +44,26 @@ public class AccountController : ControllerBase
         });
     }
 
-/*    [HttpPost("register")]
-    public IActionResult register()
+    [HttpPost("register")]
+    public IActionResult Register(RegisterDto registerDto)
     {
-
-    }*/
+        var result = _accountService.Register(registerDto);
+        if (result is 0)
+        {
+            return NotFound(new ResponseHandler<RegisterDto>
+            {
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Register failed"
+            });
+        }
+        return Ok(new ResponseHandler<RegisterDto>
+        {
+            Code = StatusCodes.Status200OK,
+            Status = HttpStatusCode.OK.ToString(),
+            Message = "Register Success"
+        });
+    }
 
     [HttpGet]
     public IActionResult GetAll()
