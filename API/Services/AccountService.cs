@@ -117,7 +117,6 @@ public class AccountService
 
     public int ForgotPasswordDto(ForgotPasswordDto forgotPasswordDto)
     {
-
         var getAccountDetail = (from e in _employeeRepository.GetAll()
                                 join a in _accountRepository.GetAll() on e.Guid equals a.Guid
                                 where e.Email == forgotPasswordDto.Email

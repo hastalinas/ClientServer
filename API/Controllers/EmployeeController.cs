@@ -42,7 +42,7 @@ public class EmployeeController : ControllerBase
         });
     }
 
-    [HttpGet("employees-detail")]
+    [HttpGet("detail")]
     public IActionResult GetAllEmployeeDetail()
     {
         var result = _employeeService.GetAllEmployeeDetail();
@@ -65,7 +65,7 @@ public class EmployeeController : ControllerBase
         });
     }
 
-    [HttpGet("employees-detail/{guid}")]
+    [HttpGet("detail/{guid}")]
     public IActionResult GetEmployeeDetailByGuid(Guid guid)
     {
         var result = _employeeService.GetEmployeeDetailByGuid(guid);
