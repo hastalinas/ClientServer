@@ -47,7 +47,7 @@ public class AccountController : ControllerBase
     [HttpPost("register")]
     public IActionResult Register(RegisterDto registerDto)
     {
-        int result = _accountService.Register(registerDto);
+        var result = _accountService.Register(registerDto);
         if (result == 0)
         {
             return StatusCode(500, new ResponseHandler<RegisterDto>
@@ -109,7 +109,7 @@ public class AccountController : ControllerBase
     public IActionResult UpdatePassword(ChangePasswordDto changePasswordDto)
     {
         var update = _accountService.ChangePassword(changePasswordDto);
-        if (update is -1)
+        if (update == 0)
         {
             return NotFound(new ResponseHandler<ChangePasswordDto>
             {
@@ -119,7 +119,7 @@ public class AccountController : ControllerBase
             });
         }
 
-        if (update is 0)
+        if (update == -1)
         {
             return NotFound(new ResponseHandler<ChangePasswordDto>
             {
@@ -129,7 +129,7 @@ public class AccountController : ControllerBase
             });
         }
 
-        if (update is 1)
+        if (update == -2)
         {
             return NotFound(new ResponseHandler<ChangePasswordDto>
             {
@@ -139,7 +139,7 @@ public class AccountController : ControllerBase
             });
         }
 
-        if (update is 2)
+        if (update == -3)
         {
             return NotFound(new ResponseHandler<ChangePasswordDto>
             {

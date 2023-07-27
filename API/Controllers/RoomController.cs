@@ -96,7 +96,6 @@ public class RoomController : ControllerBase
             });
         }
 
-
         return Ok(new ResponseHandler<RoomDto>
         {
             Code = StatusCodes.Status200OK,
@@ -175,7 +174,7 @@ public class RoomController : ControllerBase
             {
                 Code = StatusCodes.Status404NotFound,
                 Status = HttpStatusCode.NotFound.ToString(),
-                Message = "guid not found"
+                Message = "Guid not found"
             });
         }
 

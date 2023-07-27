@@ -75,7 +75,7 @@ public class EmployeeController : ControllerBase
             {
                 Code = StatusCodes.Status404NotFound,
                 Status = HttpStatusCode.NotFound.ToString(),
-                Message = "guid not found"
+                Message = "Guid not found"
             });
         }
 
@@ -138,7 +138,6 @@ public class EmployeeController : ControllerBase
                 Data = result
             });
         }
-
 
         return Ok(new ResponseHandler<EmployeeDto>
         {
