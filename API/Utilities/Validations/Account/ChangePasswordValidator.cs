@@ -11,7 +11,7 @@ public class ChangePasswordValidator : AbstractValidator<ChangePasswordDto>
     {
         _employeeRepository = employeeRepository;
 
-        RuleFor(register => register.Email).NotEmpty().WithMessage("Email is required");
+        RuleFor(register => register.Email).NotEmpty().EmailAddress().WithMessage("Email is required");
 
         RuleFor(Account => Account.OTP).NotEmpty().WithMessage("OTP is required");
 

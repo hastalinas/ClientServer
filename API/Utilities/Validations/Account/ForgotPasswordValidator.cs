@@ -12,6 +12,7 @@ public class ForgotPasswordValidator : AbstractValidator<ForgotPasswordDto>
     {
         _employeeRepository = employeeRepository;
 
-        RuleFor(e => e.Email).NotEmpty().WithMessage("Email is reuired");
+        RuleFor(e => e.Email).NotEmpty().WithMessage("Email is required")
+            .EmailAddress().WithMessage("Email is not valid");
     }
 }

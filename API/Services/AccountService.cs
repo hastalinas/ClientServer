@@ -47,114 +47,107 @@ public class AccountService
 
     public int Register(RegisterDto registerDto)
     {
-        if (!_employeeRepository.isNotExist(registerDto.Email) || !_employeeRepository.isNotExist(registerDto.PhoneNumber))
+        if (!_employeeRepository.isNotExist(registerDto.Email) || 
+            !_employeeRepository.isNotExist(registerDto.PhoneNumber))
         {
             return 0;
         }
 
-        var newNik = GenerateHandler.Nik(_employeeRepository.GetAutoNik());
-        var employeeGuid = Guid.NewGuid();
-
-
-        var employee = new Employee
-        {
-            Guid = employeeGuid,
-            Nik = newNik,
-            FirstName = registerDto.FirstName,
-            LastName = registerDto.LastName,
-            BirthDate = registerDto.BirthDate,
-            Gender = registerDto.Gender,
-            HiringDate = registerDto.HiringDate,
-            Email = registerDto.Email,
-            PhoneNumber = registerDto.PhoneNumber
-        };
-        _dBContext.Employees.Add(employee);
-
-
-        var education = new Education
-        {
-            Guid = employeeGuid,
-            Major = registerDto.Major,
-            Degree = registerDto.Degree,
-            GPA = (float)registerDto.GPA
-        };
-        _dBContext.Educations.Add(education);
-
-
-        var existingUniversity = _universityRepository.GetByCode(registerDto.UniversityCode);
-        if (existingUniversity is null)
-        {
-
-            var university = new University
-            {
-                Code = registerDto.UniversityCode,
-                Name = registerDto.UniversitasName
-            };
-            _dBContext.Universities.Add(university);
-
-
-            education.UniversityGuid = university.Guid;
-        }
-        else
-        {
-
-            education.UniversityGuid = existingUniversity.Guid;
-        }
-
-
-        var account = new Account
-        {
-            Guid = employeeGuid,
-            //Otp = registerDto.OTP,
-            Password = registerDto.Password
-        };
-        _dBContext.Accounts.Add(account);
-
+        using var transaction = _dBContext.Database.BeginTransaction();
         try
         {
-            _dBContext.SaveChanges();
+            var university = _universityRepository.GetByCode(registerDto.UniversityCode);
+            if (university is null)
+            {
+                // Jika universitas belum ada, buat objek University baru dan simpan
+                var createUniversity = _universityRepository.Create(new University
+                {
+                    Code = registerDto.UniversityCode,
+                    Name = registerDto.UniversitasName
+                });
+
+                university = createUniversity;
+            }
+
+            var newNik =
+                GenerateHandler.Nik(_employeeRepository
+                                       .GetAutoNik()); //karena niknya generate, sebelumnya kalo ga dikasih ini niknya null jadi error
+            var employeeGuid = Guid.NewGuid(); // Generate GUID baru untuk employee
+
+            // Buat objek Employee dengan nilai GUID baru
+            var employee = _employeeRepository.Create(new Employee
+            {
+                Guid = employeeGuid, //ambil dari variabel yang udah dibuat diatas
+                Nik = newNik,        //ini juga
+                FirstName = registerDto.FirstName,
+                LastName = registerDto.LastName,
+                BirthDate = registerDto.BirthDate,
+                Gender = registerDto.Gender,
+                HiringDate = registerDto.HiringDate,
+                Email = registerDto.Email,
+                PhoneNumber = registerDto.PhoneNumber
+            });
+
+
+            var education = _educationRepository.Create(new Education
+            {
+                Guid = employeeGuid, // Gunakan employeeGuid
+                Major = registerDto.Major,
+                Degree = registerDto.Degree,
+                GPA = registerDto.GPA,
+                UniversityGuid = university.Guid
+            });
+
+            var account = _accountRepository.Create(new Account
+            {
+                Guid = employeeGuid, // Gunakan employeeGuid
+                Otp = 1,             //sementara ini dicoba gabisa diisi angka nol didepan, tadi masukin 098 error
+                IsUsed = true,
+                Password = registerDto.Password
+            });
+            transaction.Commit();
             return 1;
         }
-        catch (Exception)
+        catch
         {
+            transaction.Rollback();
             return -1;
         }
     }
 
     public int ForgotPasswordDto(ForgotPasswordDto forgotPasswordDto)
     {
-        var employee = _employeeRepository.GetByEmail(forgotPasswordDto.Email);
-        if (employee is null)
-        {
-            return 0; // Email not found
-        }
 
-        var account = _accountRepository.GetByGuid(employee.Guid);
-        if (account is null)
+        var getAccountDetail = (from e in _employeeRepository.GetAll()
+                                join a in _accountRepository.GetAll() on e.Guid equals a.Guid
+                                where e.Email == forgotPasswordDto.Email
+                                select a).FirstOrDefault();
+
+        _accountRepository.Clear();
+   
+        if (getAccountDetail is null)
         {
-            return -1;
+            return 0;
         }
 
         var otp = new Random().Next(111111, 999999);
-        var isUpdated = _accountRepository.Update(new Account
+        var account = new Account
         {
-            Guid = account.Guid,
-            Password = account.Password,
+            Guid = getAccountDetail.Guid,
+            Password = getAccountDetail.Password,
             ExpiredTime = DateTime.Now.AddMinutes(5),
             Otp = otp,
             IsUsed = false,
-            CreatedDate = account.CreatedDate,
+            CreatedDate = getAccountDetail.CreatedDate,
             ModifiedDate = DateTime.Now
-        });
+        };
 
+        var isUpdated = _accountRepository.Update(account);
         if (!isUpdated)
         { 
             return -1; 
         }
-
-        forgotPasswordDto.Email = $"{otp}";
         return 1;
-
     }
 
     public int ChangePassword(ChangePasswordDto changePasswordDto)

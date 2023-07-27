@@ -47,23 +47,32 @@ public class AccountController : ControllerBase
     [HttpPost("register")]
     public IActionResult Register(RegisterDto registerDto)
     {
-        var data = _accountService.Register(registerDto);
-        if (data == 0)
+        int result = _accountService.Register(registerDto);
+        if (result == 0)
         {
             return StatusCode(500, new ResponseHandler<RegisterDto>
             {
                 Code = StatusCodes.Status500InternalServerError,
                 Status = HttpStatusCode.InternalServerError.ToString(),
-                Message = "Email or PhoneNumber is already registered.",
-                Data = null
+                Message = "Email or PhoneNumber is already registered."
             });
         }
-        return Ok(new ResponseHandler<int>
+
+        if (result == 1)
+        {
+            return Ok(new ResponseHandler<RegisterDto>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Registration success"
+            });
+        }
+
+        return StatusCode(StatusCodes.Status500InternalServerError, new ResponseHandler<RegisterDto>
         {
             Code = StatusCodes.Status200OK,
             Status = HttpStatusCode.OK.ToString(),
-            Message = "Register success",
-            Data = data
+            Message = "Error retrive from database"
         });
     }
 
@@ -91,8 +100,7 @@ public class AccountController : ControllerBase
         {
             Code = StatusCodes.Status200OK,
             Status = HttpStatusCode.OK.ToString(),
-            Message = "Otp has been sent to your email",
-            Data = forgotPasswordDto
+            Message = "Otp has been sent to your email"
         });
     }
 
