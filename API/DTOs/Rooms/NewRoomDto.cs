@@ -6,6 +6,7 @@ public class NewRoomDto
 {
     public string Name { get; set; }
     public int Floor { get; set; }
+    public int Capacity { get; set; }
 
     // Get
     public static implicit operator Room(NewRoomDto newRoomDto)
@@ -15,6 +16,7 @@ public class NewRoomDto
             Guid = new Guid(),
             Name = newRoomDto.Name,
             Floor = newRoomDto.Floor,
+            Capacity = newRoomDto.Capacity,
             CreatedDate = DateTime.Now,
             ModifiedDate = DateTime.Now
         };
@@ -26,7 +28,8 @@ public class NewRoomDto
         return new NewRoomDto
         {
             Name = room.Name,
-            Floor = room.Floor
+            Floor = room.Floor,
+            Capacity = room.Capacity
         };
     }
 }

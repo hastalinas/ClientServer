@@ -47,7 +47,6 @@ public class RegisterValidator : AbstractValidator<RegisterDto>
         RuleFor(a => a.Password).NotEmpty().WithMessage("Password is required");
 
         RuleFor(a => a.ConfirmPassword).NotEmpty().Equal(a => a.ConfirmPassword). WithMessage("Password don't match");
-
     }
 
     private bool IsDuplicateValue(string value)

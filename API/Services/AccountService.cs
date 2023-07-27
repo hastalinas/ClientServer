@@ -135,7 +135,6 @@ public class AccountService
             return -1; //Account not found
         }
 
-
         var getAccount = _accountRepository.GetByGuid(isExist.Guid);
         var account = new Account
         {

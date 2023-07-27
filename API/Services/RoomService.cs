@@ -7,10 +7,12 @@ namespace API.Services;
 public class RoomService
 {
     private readonly IRoomRepository _roomRepository;
+    private readonly IBookingRepository _bookingRepository;
 
-    public RoomService(IRoomRepository roomRepository)
+    public RoomService(IRoomRepository roomRepository, IBookingRepository bookingRepository)
     {
         _roomRepository = roomRepository;
+        _bookingRepository = bookingRepository; 
     }
 
     public IEnumerable<RoomDto> GetAll()

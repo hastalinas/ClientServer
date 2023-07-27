@@ -1,6 +1,7 @@
 ﻿using API.Contracts;
 using API.DTOs.Accounts;
 using API.DTOs.Bookings;
+using API.DTOs.Rooms;
 using API.DTOs.Universities;
 using API.Models;
 using API.Services;
@@ -161,5 +162,51 @@ public class BookingController : ControllerBase
             Message = "Delete success",
             Data = result
         });
+    }
+
+    [HttpGet("free-room-today")]
+    public IActionResult FreeRoomsToday()
+    {
+        var result = _bookingService.FreeRoomsToday();
+        if (result is null) 
+        {
+            return NotFound(new ResponseHandler<RoomDto>
+            {
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Room not found"
+            });
+        }
+        return Ok(new ResponseHandler<IEnumerable<RoomDto>>
+        {
+            Code = StatusCodes.Status200OK,
+            Status = HttpStatusCode.OK.ToString(),
+            Message = "Succes retrivieng data",
+            Data = result
+        });
+    }
+
+    [HttpGet("booking-length")]
+    public IActionResult BookingLength()
+    {
+        var result = _bookingService.BookingLength();
+        if (result is null)
+        {
+            return NotFound(new ResponseHandler<BookingLengthDto>
+            {
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Room not found"
+            });
+        }
+
+        return Ok(
+            new ResponseHandler<IEnumerable<BookingLengthDto>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success retrieving data",
+                Data = result
+            });
     }
 }
