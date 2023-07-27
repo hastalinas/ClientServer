@@ -129,6 +129,30 @@ public class BookingService
             : 0; // booking failed to delete;
     }
 
+    public IEnumerable<DetailBookingDto> GetAllDetailBooking()
+    {
+        var bookingDetail = (from booking in _bookingRepository.GetAll()
+                              join employee in _employeeRepository.GetAll() on booking.EmployeeGuid equals employee.Guid
+                              join room in _roomRepository.GetAll() on booking.RoomGuid equals room.Guid
+                              select new DetailBookingDto
+                              {
+                                  BookingGuid = booking.Guid,
+                                  BookedNik = employee.Nik,
+                                  BookedBy = employee.FirstName + " " + employee.LastName,
+                                  RoomName = room.Name,
+                                  StartDate = booking.StartDate,
+                                  EndDate = booking.EndDate,
+                                  Remarks = booking.Remarks,
+                                  Status = booking.Status
+                              });
+        if (!bookingDetail.Any() || bookingDetail is null)
+        {
+            return Enumerable.Empty<DetailBookingDto>();
+        }
+
+        return bookingDetail;
+    }
+
     public IEnumerable<RoomDto> FreeRoomsToday()
     {
         List<RoomDto> roomDtos = new List<RoomDto>();
@@ -201,5 +225,15 @@ public class BookingService
         }
 
         return listBookingLength;
+    }
+
+    public DetailBookingDto? GetDetailBookingByGuid(Guid guid)
+    {
+        var result = GetAllDetailBooking().Where(booking => booking.BookingGuid == guid).SingleOrDefault();
+        if (result is null)
+        {
+            return null;
+        }
+        return result;        // booking is found;
     }
 }
