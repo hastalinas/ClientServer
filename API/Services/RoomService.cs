@@ -8,11 +8,13 @@ public class RoomService
 {
     private readonly IRoomRepository _roomRepository;
     private readonly IBookingRepository _bookingRepository;
+    private readonly IEmployeeRepository _employeeRepository;
 
-    public RoomService(IRoomRepository roomRepository, IBookingRepository bookingRepository)
+    public RoomService(IRoomRepository roomRepository, IBookingRepository bookingRepository, IEmployeeRepository employeeRepository)
     {
         _roomRepository = roomRepository;
-        _bookingRepository = bookingRepository; 
+        _bookingRepository = bookingRepository;
+        _employeeRepository = employeeRepository;
     }
 
     public IEnumerable<RoomDto> GetAll()
@@ -82,5 +84,37 @@ public class RoomService
 
         return result ? 1 // room is deleted;
             : 0; // room failed to delete;
+    }
+
+    public IEnumerable<BookedRoomDto> GetAllBookedRoomToday()
+    {
+        var today = DateTime.Today.ToString("dd-MM-yyyy");
+        var bookings = _bookingRepository.GetAll()
+                        .Where(b => b.StartDate.ToString("dd-MM-yyyy").Equals(today));
+
+        if (!bookings.Any())
+        {
+            return Enumerable.Empty<BookedRoomDto>();
+        }
+
+        var bookedRoomTodayDtos = new List<BookedRoomDto>();
+
+        foreach (var booking in bookings)
+        {
+            var employee = _employeeRepository.GetByGuid(booking.EmployeeGuid);
+            var room = _roomRepository.GetByGuid(booking.RoomGuid);
+
+            BookedRoomDto bookedRoom = new BookedRoomDto
+            {
+                BookingGuid = booking.Guid,
+                RoomName = room.Name,
+                Status = booking.Status,
+                Floor = room.Floor,
+                BookedBy = employee.FirstName + " " + employee.LastName
+            };
+            bookedRoomTodayDtos.Add(bookedRoom);
+        }
+
+        return bookedRoomTodayDtos; // room is found;
     }
 }

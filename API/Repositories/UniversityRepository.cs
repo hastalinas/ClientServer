@@ -9,6 +9,10 @@ public class UniversityRepository : GeneralRepository<University>, IUniversityRe
 {
     public UniversityRepository(BookingDBContext context) : base(context) { }
 
+    public University? GetByCode(string code)
+    {
+        return _context.Set<University>().SingleOrDefault(u => u.Code == code);  
+    }
     public IEnumerable<University> GetByName(string name)
     {
         return _context.Set<University>()

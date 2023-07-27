@@ -11,11 +11,53 @@ public class BookingService
 {
     private readonly IBookingRepository _bookingRepository;
     private readonly IRoomRepository _roomRepository;
+    private readonly IEmployeeRepository _employeeRepository;
 
-    public BookingService(IBookingRepository bookingRepository, IRoomRepository roomRepository)
+    public BookingService(IBookingRepository bookingRepository, IRoomRepository roomRepository, IEmployeeRepository employeeRepository)
     {
         _bookingRepository = bookingRepository;
         _roomRepository = roomRepository;
+        _employeeRepository = employeeRepository;   
+    }
+
+    public IEnumerable<DetailBookingDto> GetALl()
+    {
+        var resultBooking = _bookingRepository.GetAll();
+        if (!resultBooking.Any())
+        {
+            return Enumerable.Empty<DetailBookingDto>();
+        }
+
+        var detailDtos = new List<DetailBookingDto>();
+        foreach (var result in resultBooking)
+        {
+            var resultEmployee = _employeeRepository.GetByGuid(result.EmployeeGuid);
+            if (resultEmployee is null)
+            {
+                return Enumerable.Empty<DetailBookingDto>();
+            }
+
+            var resultRoom = _roomRepository.GetByGuid(result.RoomGuid);
+            if (resultRoom is null)
+            {
+                return Enumerable.Empty<DetailBookingDto>();
+            }
+
+            var toDto = new DetailBookingDto
+            {
+                BookingGuid = result.Guid,
+                BookedNik = resultEmployee.Nik,
+                BookedBy = resultEmployee.FirstName + " " + resultEmployee.LastName,
+                RoomName = resultRoom.Name,
+                StartDate = result.StartDate,
+                EndDate = result.EndDate,
+                Status = result.Status,
+                Remarks = result.Remarks
+            };
+
+            detailDtos.Add(toDto);
+        }
+        return detailDtos;
     }
 
     public IEnumerable<BookingDto> GetAll()

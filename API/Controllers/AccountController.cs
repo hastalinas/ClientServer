@@ -47,21 +47,23 @@ public class AccountController : ControllerBase
     [HttpPost("register")]
     public IActionResult Register(RegisterDto registerDto)
     {
-        var result = _accountService.Register(registerDto);
-        if (result is null)
+        var data = _accountService.Register(registerDto);
+        if (data == 0)
         {
-            return NotFound(new ResponseHandler<RegisterDto>
+            return StatusCode(500, new ResponseHandler<RegisterDto>
             {
-                Code = StatusCodes.Status404NotFound,
-                Status = HttpStatusCode.NotFound.ToString(),
-                Message = "Register failed"
+                Code = StatusCodes.Status500InternalServerError,
+                Status = HttpStatusCode.InternalServerError.ToString(),
+                Message = "Email or PhoneNumber is already registered.",
+                Data = null
             });
         }
-        return Ok(new ResponseHandler<RegisterDto>
+        return Ok(new ResponseHandler<int>
         {
             Code = StatusCodes.Status200OK,
             Status = HttpStatusCode.OK.ToString(),
-            Message = "Register Success"
+            Message = "Register success",
+            Data = data
         });
     }
 

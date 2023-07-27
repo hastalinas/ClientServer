@@ -1,5 +1,6 @@
 ﻿using API.Contracts;
 using API.DTOs.Accounts;
+using API.Repositories;
 using FluentValidation;
 
 namespace API.Utilities.Validations.Account;
@@ -7,12 +8,18 @@ namespace API.Utilities.Validations.Account;
 public class RegisterValidator : AbstractValidator<RegisterDto>
 {
     private readonly IEmployeeRepository _employeeRepository;
-    public RegisterValidator(IEmployeeRepository employeeRepository)
+    private readonly IEducationRepository _educationRepository;
+    private readonly IUniversityRepository _universityRepository;
+    public RegisterValidator(IEmployeeRepository employeeRepository, IEducationRepository educationRepository, IUniversityRepository universityRepository)
     {
         _employeeRepository = employeeRepository;
+        _educationRepository = educationRepository;
+        _universityRepository = universityRepository;
 
         // rule for employee
         RuleFor(e => e.FirstName).NotEmpty();
+
+        RuleFor(e => e.LastName).NotEmpty();
 
         RuleFor(e => e.BirthDate).NotEmpty().LessThanOrEqualTo(DateTime.Now.AddYears(-20));
 
@@ -47,6 +54,8 @@ public class RegisterValidator : AbstractValidator<RegisterDto>
         RuleFor(a => a.Password).NotEmpty().WithMessage("Password is required");
 
         RuleFor(a => a.ConfirmPassword).NotEmpty().Equal(a => a.ConfirmPassword). WithMessage("Password don't match");
+        
+        //RuleFor(a => a.OTP).NotEmpty();
     }
 
     private bool IsDuplicateValue(string value)

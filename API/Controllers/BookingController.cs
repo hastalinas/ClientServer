@@ -209,4 +209,27 @@ public class BookingController : ControllerBase
                 Data = result
             });
     }
+
+    [HttpGet("detailBooking")]
+    public IActionResult GetAllDetail()
+    {
+        var result = _bookingService.GetALl();
+        if (!result.Any())
+        {
+            return NotFound(new ResponseHandler<BookingDto>
+            {
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Data is not found"
+            });
+        }
+
+        return Ok(new ResponseHandler<IEnumerable<DetailBookingDto>>
+        {
+            Code = StatusCodes.Status200OK,
+            Status = HttpStatusCode.OK.ToString(),
+            Message = "Success retrieve data",
+            Data = result
+        });
+    }
 }

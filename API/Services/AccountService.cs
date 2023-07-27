@@ -1,4 +1,5 @@
 ﻿using API.Contracts;
+using API.Data;
 using API.DTOs.Accounts;
 using API.DTOs.Educations;
 using API.DTOs.Employees;
@@ -6,6 +7,7 @@ using API.DTOs.Universities;
 using API.Models;
 using API.Repositories;
 using API.Utilities.Handlers;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Services;
 
@@ -15,14 +17,15 @@ public class AccountService
     private readonly IEmployeeRepository _employeeRepository;
     private readonly IEducationRepository _educationRepository;
     private readonly IUniversityRepository _universityRepository;
+    private readonly BookingDBContext _dBContext;
 
-    public AccountService(IAccountRepository accountRepository, IEmployeeRepository employeeRepository, IUniversityRepository universityRepository, IEducationRepository educationRepository)
+    public AccountService(IAccountRepository accountRepository, IEmployeeRepository employeeRepository, IUniversityRepository universityRepository, IEducationRepository educationRepository, BookingDBContext dbContext)
     {
         _accountRepository = accountRepository;
         _employeeRepository = employeeRepository;
         _educationRepository = educationRepository;
         _universityRepository = universityRepository;
-
+        _dBContext = dbContext;
     }
 
     public int Login(LoginDto loginDto)
@@ -42,53 +45,80 @@ public class AccountService
         return 0;
     }
 
-    public RegisterDto? Register(RegisterDto registerDto)
+    public int Register(RegisterDto registerDto)
     {
-        Employee createEmployee = new NewEmployeeDto
+        if (!_employeeRepository.isNotExist(registerDto.Email) || !_employeeRepository.isNotExist(registerDto.PhoneNumber))
         {
-            Firstname = registerDto.FirstName,
-            Lastname = registerDto.LastName,
-            Birtdate = registerDto.BirthDate,
-            Gender = registerDto.Gender,
-            Hiringdate = registerDto.HiringDate,
-            Email = registerDto.Email,
-            Phone = registerDto.PhoneNumber
-        };
-
-        createEmployee.Nik = GenerateHandler.Nik(_employeeRepository.GetAutoNik());
-        var employeeResult = _employeeRepository.Create(createEmployee);
-        
-        var universityResult = _universityRepository.Create(new NewUniversityDto
-        {
-            Code = registerDto.UniversityCode,
-            Name = registerDto.UniversityCode
-        });
-
-        var educationResullt = _educationRepository.Create(new NewEducationDto
-        {
-            Guid = _employeeRepository.GetLastEmployeeGuid(),
-            Degree = registerDto.Degree,
-            Major = registerDto.Major,
-            GPA = registerDto.GPA,
-            UniversityGuid = _universityRepository.GetLastUniversityGuid()
-        });
-
-        var accountResult = _accountRepository.Create(new NewAccountDto
-        {
-            Guid = _employeeRepository.GetLastEmployeeGuid(),
-            IsUsed = true,
-            ExpiredTime = DateTime.Now.AddYears(3),
-            OTP = registerDto.OTP,
-            Password = registerDto.Password,
-        });
-
-        if (employeeResult is null || universityResult is null || educationResullt is null || accountResult is null)
-        {
-            return null;
+            return 0;
         }
 
-        return (RegisterDto)registerDto;
+        var newNik = GenerateHandler.Nik(_employeeRepository.GetAutoNik());
+        var employeeGuid = Guid.NewGuid();
 
+
+        var employee = new Employee
+        {
+            Guid = employeeGuid,
+            Nik = newNik,
+            FirstName = registerDto.FirstName,
+            LastName = registerDto.LastName,
+            BirthDate = registerDto.BirthDate,
+            Gender = registerDto.Gender,
+            HiringDate = registerDto.HiringDate,
+            Email = registerDto.Email,
+            PhoneNumber = registerDto.PhoneNumber
+        };
+        _dBContext.Employees.Add(employee);
+
+
+        var education = new Education
+        {
+            Guid = employeeGuid,
+            Major = registerDto.Major,
+            Degree = registerDto.Degree,
+            GPA = (float)registerDto.GPA
+        };
+        _dBContext.Educations.Add(education);
+
+
+        var existingUniversity = _universityRepository.GetByCode(registerDto.UniversityCode);
+        if (existingUniversity is null)
+        {
+
+            var university = new University
+            {
+                Code = registerDto.UniversityCode,
+                Name = registerDto.UniversitasName
+            };
+            _dBContext.Universities.Add(university);
+
+
+            education.UniversityGuid = university.Guid;
+        }
+        else
+        {
+
+            education.UniversityGuid = existingUniversity.Guid;
+        }
+
+
+        var account = new Account
+        {
+            Guid = employeeGuid,
+            //Otp = registerDto.OTP,
+            Password = registerDto.Password
+        };
+        _dBContext.Accounts.Add(account);
+
+        try
+        {
+            _dBContext.SaveChanges();
+            return 1;
+        }
+        catch (Exception)
+        {
+            return -1;
+        }
     }
 
     public int ForgotPasswordDto(ForgotPasswordDto forgotPasswordDto)
