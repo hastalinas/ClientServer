@@ -108,30 +108,29 @@ public class EmployeeService
 
     public IEnumerable<EmployeeDetailDto> GetAllEmployeeDetail()
     {
-        var result = from employee in _employeeRepository.GetAll()
-                     join education in _educationRepository.GetAll() on employee.Guid equals education.Guid
-                     join university in _universityRepository.GetAll() on education.UniversityGuid equals
-                         university.Guid
+        var result = from em in _employeeRepository.GetAll()
+                     join ed in _educationRepository.GetAll() on em.Guid equals ed.Guid
+                     join univ in _universityRepository.GetAll() on ed.UniversityGuid equals univ.Guid
                      select new EmployeeDetailDto
                      {
-                         EmployeeGuid = employee.Guid,
-                         NIK = employee.Nik,
-                         FullName = employee.FirstName + " " + employee.LastName,
-                         BirthDate = employee.BirthDate,
-                         Gender = employee.Gender,
-                         HiringDate = employee.HiringDate,
-                         Email = employee.Email,
-                         PhoneNumber = employee.PhoneNumber,
-                         Major = education.Major,
-                         Degree = education.Degree,
-                         GPA = education.GPA,
-                         UniversityName = university.Name
+                         EmployeeGuid = em.Guid,
+                         NIK = em.Nik,
+                         FullName = em.FirstName + " " + em.LastName,
+                         BirthDate = em.BirthDate,
+                         Gender = em.Gender,
+                         HiringDate = em.HiringDate,
+                         Email = em.Email,
+                         PhoneNumber = em.PhoneNumber,
+                         Major = ed.Major,
+                         Degree = ed.Degree,
+                         GPA = ed.GPA,
+                         UniversityName = univ.Name
                      };
         if (result is null)
         {
             return Enumerable.Empty<EmployeeDetailDto>();
         }
-        return result; // employeeDetail is found;
+        return result; 
     }
 
     public EmployeeDetailDto? GetEmployeeDetailByGuid(Guid guid)

@@ -151,13 +151,17 @@ public class AccountService
 
     public int ChangePassword(ChangePasswordDto changePasswordDto)
     {
-        var isExist = _employeeRepository.CheckEmail(changePasswordDto.Email);
-        if (isExist is null)
+        var getAccount = (from e in _employeeRepository.GetAll()
+                          join a in _accountRepository.GetAll() on e.Guid equals a.Guid
+                          where e.Email == changePasswordDto.Email
+                          select a).FirstOrDefault();
+
+        if (getAccount is null)
         {
-            return -1; //Account not found
+            return 0; //Account not found
         }
 
-        var getAccount = _accountRepository.GetByGuid(isExist.Guid);
+        //var getAccount = _accountRepository.GetByGuid(isExist.Guid);
         var account = new Account
         {
             Guid = getAccount.Guid,
@@ -170,25 +174,25 @@ public class AccountService
         };
         if (getAccount.Otp != changePasswordDto.OTP)
         {
-            return 0;
+            return -1;
         }
 
         if (getAccount.IsUsed == true)
         {
-            return 1;
+            return -2;
         }
 
         if (getAccount.ExpiredTime < DateTime.Now)
         {
-            return 2;
+            return -3;
         }
 
         var isUpdated = _accountRepository.Update(account);
         if (!isUpdated)
         {
-            return 0; //Account Not Update
+            return -4; //Account Not Update
         }
-        return 3;
+        return 1; // Oke
     }
     public IEnumerable<AccountDto> GetAll()
     {
