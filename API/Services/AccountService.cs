@@ -30,19 +30,27 @@ public class AccountService
 
     public int Login(LoginDto loginDto)
     {
-        var getEmployee = _employeeRepository.GetByEmail(loginDto.Email);
-        if (getEmployee is null)
+        try
         {
-            return 0; // Employee not found
+            var getEmployee = _employeeRepository.GetByEmail(loginDto.Email);
+            if (getEmployee is null)
+            {
+                return 0; // Employee not found
+            }
+
+            var getAccount = _accountRepository.GetByGuid(getEmployee.Guid);
+            if (getAccount.Password != null && HashingHandler.ValidateHash(loginDto.Password, getAccount.Password))
+            {
+                return 1; // Login success
+            }
+
+            return 0;
+        }
+        catch
+        {
+            return 0;
         }
 
-        var getAccount = _accountRepository.GetByGuid(getEmployee.Guid);
-        if (getAccount.Password == loginDto.Password)
-        {
-            return 1; // Login success
-        }
-
-        return 0;
     }
 
     public int Register(RegisterDto registerDto)
@@ -132,7 +140,7 @@ public class AccountService
         var account = new Account
         {
             Guid = getAccountDetail.Guid,
-            Password = HashingHandler.GenerateHash(getAccountDetail.Password),
+            Password = HashingHandler.GenerateHash(getAccountDetail.Password), // hashing password
             ExpiredTime = DateTime.Now.AddMinutes(5),
             Otp = otp,
             IsUsed = false,
@@ -169,7 +177,7 @@ public class AccountService
             CreatedDate = getAccount.CreatedDate,
             Otp = getAccount.Otp,
             ExpiredTime = getAccount.ExpiredTime,
-            Password = changePasswordDto.NewPassword // hashing password 
+            Password = HashingHandler.GenerateHash(changePasswordDto.NewPassword) // hashing password 
         };
         if (getAccount.Otp != changePasswordDto.OTP)
         {
