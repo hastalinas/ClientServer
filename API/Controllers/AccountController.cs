@@ -58,22 +58,13 @@ public class AccountController : ControllerBase
             });
         }
 
-        if (result == 1)
-        {
-            return Ok(new ResponseHandler<RegisterDto>
-            {
-                Code = StatusCodes.Status200OK,
-                Status = HttpStatusCode.OK.ToString(),
-                Message = "Registration success"
-            });
-        }
-
-        return StatusCode(StatusCodes.Status500InternalServerError, new ResponseHandler<RegisterDto>
-        {
+         return Ok(new ResponseHandler<RegisterDto>
+         {
             Code = StatusCodes.Status200OK,
             Status = HttpStatusCode.OK.ToString(),
-            Message = "Error retrive from database"
-        });
+            Message = "Registration success"
+         });
+        
     }
 
     [HttpPost("forgotpassword")]

@@ -17,14 +17,22 @@ public class AccountService
     private readonly IEmployeeRepository _employeeRepository;
     private readonly IEducationRepository _educationRepository;
     private readonly IUniversityRepository _universityRepository;
+    private readonly IEmailHandler _emailHandler;
     private readonly BookingDBContext _dBContext;
 
-    public AccountService(IAccountRepository accountRepository, IEmployeeRepository employeeRepository, IUniversityRepository universityRepository, IEducationRepository educationRepository, BookingDBContext dbContext)
+    public AccountService(
+        IAccountRepository accountRepository, 
+        IEmployeeRepository employeeRepository, 
+        IUniversityRepository universityRepository, 
+        IEducationRepository educationRepository, 
+        IEmailHandler emailHandler, 
+        BookingDBContext dbContext)
     {
         _accountRepository = accountRepository;
         _employeeRepository = employeeRepository;
         _educationRepository = educationRepository;
         _universityRepository = universityRepository;
+        _emailHandler = emailHandler;
         _dBContext = dbContext;
     }
 
@@ -39,7 +47,7 @@ public class AccountService
             }
 
             var getAccount = _accountRepository.GetByGuid(getEmployee.Guid);
-            if (getAccount.Password != null && HashingHandler.ValidateHash(loginDto.Password, getAccount.Password))
+            if (getEmployee != null && HashingHandler.ValidateHash(loginDto.Password, getAccount.Password))
             {
                 return 1; // Login success
             }
@@ -124,35 +132,38 @@ public class AccountService
 
     public int ForgotPasswordDto(ForgotPasswordDto forgotPasswordDto)
     {
+        var otp = new Random().Next(111111, 999999);
         var getAccountDetail = (from e in _employeeRepository.GetAll()
                                 join a in _accountRepository.GetAll() on e.Guid equals a.Guid
                                 where e.Email == forgotPasswordDto.Email
                                 select a).FirstOrDefault();
 
-        _accountRepository.Clear();
-   
         if (getAccountDetail is null)
         {
-            return 0;
+            return 0; // no email found
         }
 
-        var otp = new Random().Next(111111, 999999);
-        var account = new Account
+        _accountRepository.Clear();
+
+        var hashedPassword = HashingHandler.GenerateHash(getAccountDetail.Password);
+        var isUpdated = _accountRepository.Update(new Account
         {
             Guid = getAccountDetail.Guid,
-            Password = HashingHandler.GenerateHash(getAccountDetail.Password), // hashing password
+            Password = hashedPassword,
             ExpiredTime = DateTime.Now.AddMinutes(5),
             Otp = otp,
             IsUsed = false,
             CreatedDate = getAccountDetail.CreatedDate,
-            ModifiedDate = DateTime.Now
-        };
+            ModifiedDate = getAccountDetail.ModifiedDate
+        });
 
-        var isUpdated = _accountRepository.Update(account);
         if (!isUpdated)
-        { 
-            return -1; 
+        {
+            return -1; // error update
         }
+
+        _emailHandler.SendEmail(forgotPasswordDto.Email, "OTP", $"Your OTP id {otp}");
+
         return 1;
     }
 
@@ -165,10 +176,9 @@ public class AccountService
 
         if (getAccount is null)
         {
-            return 0; //Account not found
+            return 0;
         }
-
-        //var getAccount = _accountRepository.GetByGuid(isExist.Guid);
+        var hashedPassword = HashingHandler.GenerateHash(changePasswordDto.NewPassword);
         var account = new Account
         {
             Guid = getAccount.Guid,
@@ -177,8 +187,9 @@ public class AccountService
             CreatedDate = getAccount.CreatedDate,
             Otp = getAccount.Otp,
             ExpiredTime = getAccount.ExpiredTime,
-            Password = HashingHandler.GenerateHash(changePasswordDto.NewPassword) // hashing password 
+            Password = hashedPassword,
         };
+
         if (getAccount.Otp != changePasswordDto.OTP)
         {
             return -1;
@@ -191,15 +202,18 @@ public class AccountService
 
         if (getAccount.ExpiredTime < DateTime.Now)
         {
-            return -3;
+            return -3; // OTP expired
         }
+
+        _accountRepository.Clear();
 
         var isUpdated = _accountRepository.Update(account);
         if (!isUpdated)
         {
-            return -4; //Account Not Update
+            return -4; //Account not Update
         }
-        return 1; // Oke
+
+        return 3;
     }
     public IEnumerable<AccountDto> GetAll()
     {
