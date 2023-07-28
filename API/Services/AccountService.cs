@@ -70,15 +70,14 @@ public class AccountService
             }
 
             var newNik =
-                GenerateHandler.Nik(_employeeRepository
-                                       .GetAutoNik()); //karena niknya generate, sebelumnya kalo ga dikasih ini niknya null jadi error
+                GenerateHandler.Nik(_employeeRepository.GetAutoNik()); //karena niknya generate
             var employeeGuid = Guid.NewGuid(); // Generate GUID baru untuk employee
 
             // Buat objek Employee dengan nilai GUID baru
             var employee = _employeeRepository.Create(new Employee
             {
-                Guid = employeeGuid, //ambil dari variabel yang udah dibuat diatas
-                Nik = newNik,        //ini juga
+                Guid = employeeGuid, 
+                Nik = newNik,        
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
                 BirthDate = registerDto.BirthDate,
@@ -91,7 +90,7 @@ public class AccountService
 
             var education = _educationRepository.Create(new Education
             {
-                Guid = employeeGuid, // Gunakan employeeGuid
+                Guid = employeeGuid, 
                 Major = registerDto.Major,
                 Degree = registerDto.Degree,
                 GPA = registerDto.GPA,
@@ -100,10 +99,10 @@ public class AccountService
 
             var account = _accountRepository.Create(new Account
             {
-                Guid = employeeGuid, // Gunakan employeeGuid
-                Otp = 1,             //sementara ini dicoba gabisa diisi angka nol didepan, tadi masukin 098 error
+                Guid = employeeGuid, 
+                Otp = 1,            
                 IsUsed = true,
-                Password = registerDto.Password
+                Password = HashingHandler.GenerateHash(registerDto.Password) // hashing password
             });
             transaction.Commit();
             return 1;
@@ -133,7 +132,7 @@ public class AccountService
         var account = new Account
         {
             Guid = getAccountDetail.Guid,
-            Password = getAccountDetail.Password,
+            Password = HashingHandler.GenerateHash(getAccountDetail.Password),
             ExpiredTime = DateTime.Now.AddMinutes(5),
             Otp = otp,
             IsUsed = false,
@@ -170,7 +169,7 @@ public class AccountService
             CreatedDate = getAccount.CreatedDate,
             Otp = getAccount.Otp,
             ExpiredTime = getAccount.ExpiredTime,
-            Password = changePasswordDto.NewPassword
+            Password = changePasswordDto.NewPassword // hashing password 
         };
         if (getAccount.Otp != changePasswordDto.OTP)
         {
