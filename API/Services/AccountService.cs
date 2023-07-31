@@ -1,5 +1,6 @@
 ﻿using API.Contracts;
 using API.Data;
+using API.DTOs.AccountRoles;
 using API.DTOs.Accounts;
 using API.DTOs.Educations;
 using API.DTOs.Employees;
@@ -9,6 +10,7 @@ using API.Repositories;
 using API.Utilities.Handlers;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using TokenHandler = Microsoft.IdentityModel.Tokens.TokenHandler;
 
 namespace API.Services;
 
@@ -18,6 +20,7 @@ public class AccountService
     private readonly IEmployeeRepository _employeeRepository;
     private readonly IEducationRepository _educationRepository;
     private readonly IUniversityRepository _universityRepository;
+    private readonly IAccounRoleRepository _accountRoleRepository;
     private readonly IEmailHandler _emailHandler;
     private readonly ITokenHandler _tokenHandler;
     private readonly BookingDBContext _dBContext;
@@ -27,6 +30,7 @@ public class AccountService
         IEmployeeRepository employeeRepository, 
         IUniversityRepository universityRepository, 
         IEducationRepository educationRepository, 
+        IAccounRoleRepository accounRoleRepository,
         IEmailHandler emailHandler, 
         ITokenHandler tokenHandler,
         BookingDBContext dbContext)
@@ -35,6 +39,7 @@ public class AccountService
         _employeeRepository = employeeRepository;
         _educationRepository = educationRepository;
         _universityRepository = universityRepository;
+        _accountRoleRepository = accounRoleRepository;
         _emailHandler = emailHandler;
         _tokenHandler = tokenHandler;
         _dBContext = dbContext;
@@ -57,13 +62,21 @@ public class AccountService
             {
                 return "-1";
             }
-           
+
+            var employee = _employeeRepository.GetByEmail(loginDto.Email);
+            var getRoles = _accountRoleRepository.GetRoleNamesByAccountGuid(employee.Guid);
+
             var claims = new List<Claim>
             {
                 new Claim("Guid", getEmployee.Guid.ToString()),
                 new Claim("FullName", $"{getEmployee.FirstName } {getEmployee.LastName }"),
                 new Claim("Email", getEmployee.Email)
             };
+
+            foreach (var role in getRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var generateToken = _tokenHandler.GenerateToken(claims);
             if (generateToken is null)
@@ -138,6 +151,13 @@ public class AccountService
                 IsUsed = true,
                 Password = HashingHandler.GenerateHash(registerDto.Password) // hashing password
             });
+
+            var accountRole = _accountRoleRepository.Create(new NewAccountRoleDto
+            {
+                AccountGuid = account.Guid,
+                RoleGuid = Guid.Parse("4887ec13-b482-47b3-9b24-08db91a71770")
+            });
+
             transaction.Commit();
             return 1;
         }

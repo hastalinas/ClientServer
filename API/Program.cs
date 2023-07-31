@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using TokenHandler = API.Utilities.Handlers.TokenHandler;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -75,7 +76,7 @@ builder.Services.AddFluentValidationAutoValidation()
        .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
 // Register TokenHandler
-builder.Services.AddScoped<ITokenHandler, API.Utilities.Handlers.TokenHandler>();
+builder.Services.AddScoped<ITokenHandler,TokenHandler>();
 
 // CORS Configuration
 builder.Services.AddCors(options =>
@@ -100,10 +101,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["JWTConfig:SecretKey"])),
                ValidateIssuer = false,
                //Usually, this is your application base URL
-               ValidIssuer = "JWTConfig:Issuer",
+               ValidIssuer = builder.Configuration["JWTConfig:Issuer"],
                ValidateAudience = false,
                //If the JWT is created using a web service, then this would be the consumer URL.
-               ValidAudience = "JWTConfig:Audience",
+               ValidAudience = builder.Configuration["JWTConfig:Audience"],
                ValidateLifetime = true,
                ClockSkew = TimeSpan.Zero
            };

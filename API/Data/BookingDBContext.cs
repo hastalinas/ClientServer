@@ -1,4 +1,5 @@
-﻿using API.Models;
+﻿using API.DTOs.Roles;
+using API.Models;
 using Microsoft.EntityFrameworkCore;
 namespace API.Data;
 
@@ -20,6 +21,12 @@ public class BookingDBContext : DbContext
     {
         // untuk mencegah duplikasi data
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Role>().HasData(new NewRoleDafaultDto{
+                                                Guid = Guid.Parse("4887ec13-b482-47b3-9b24-08db91a71770"),
+                                                Name = "Employee"
+                                            });
+
         modelBuilder.Entity<Employee>()
                     .HasIndex(e => new{
                         e.Nik,

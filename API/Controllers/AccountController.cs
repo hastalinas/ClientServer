@@ -23,8 +23,8 @@ public class AccountController : ControllerBase
         _accountService = accountService;
     }
 
-    [HttpPost("login")]
     [AllowAnonymous]
+    [HttpPost("login")]
     public IActionResult Login(LoginDto loginDto)
     {
         var result = _accountService.Login(loginDto);
@@ -62,8 +62,8 @@ public class AccountController : ControllerBase
         });
     }
 
-    [HttpPost("register")]
     [AllowAnonymous]
+    [HttpPost("register")]
     public IActionResult Register(RegisterDto registerDto)
     {
         var result = _accountService.Register(registerDto);
