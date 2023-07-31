@@ -70,6 +70,9 @@ builder.Services.AddTransient<IEmailHandler, EmailHandler>(_ => new EmailHandler
 builder.Services.AddFluentValidationAutoValidation()
        .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
+// Register TokenHandler
+builder.Services.AddScoped<ITokenHandler, TokenHandler>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

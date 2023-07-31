@@ -8,6 +8,7 @@ using API.Models;
 using API.Repositories;
 using API.Utilities.Handlers;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace API.Services;
 
@@ -18,6 +19,7 @@ public class AccountService
     private readonly IEducationRepository _educationRepository;
     private readonly IUniversityRepository _universityRepository;
     private readonly IEmailHandler _emailHandler;
+    private readonly ITokenHandler _tokenHandler;
     private readonly BookingDBContext _dBContext;
 
     public AccountService(
@@ -26,6 +28,7 @@ public class AccountService
         IUniversityRepository universityRepository, 
         IEducationRepository educationRepository, 
         IEmailHandler emailHandler, 
+        ITokenHandler tokenHandler,
         BookingDBContext dbContext)
     {
         _accountRepository = accountRepository;
@@ -33,30 +36,44 @@ public class AccountService
         _educationRepository = educationRepository;
         _universityRepository = universityRepository;
         _emailHandler = emailHandler;
+        _tokenHandler = tokenHandler;
         _dBContext = dbContext;
     }
 
-    public int Login(LoginDto loginDto)
+    public string Login(LoginDto loginDto)
     {
+        /*
+         */
         try
         {
             var getEmployee = _employeeRepository.GetByEmail(loginDto.Email);
             if (getEmployee is null)
             {
-                return 0; // Employee not found
+                return "-1"; // Employee not found
             }
 
             var getAccount = _accountRepository.GetByGuid(getEmployee.Guid);
             if (getEmployee != null && HashingHandler.ValidateHash(loginDto.Password, getAccount.Password))
             {
-                return 1; // Login success
-            }
+                var claims = new List<Claim>
+            {
+                new Claim("Guid", getEmployee.Guid.ToString()),
+                new Claim("FullName", $"{getEmployee.FirstName } {getEmployee.LastName }"),
+                new Claim("Email", getEmployee.Email)
+            };
 
-            return 0;
+                var generateToken = _tokenHandler.GenerateToken(claims);
+                if (generateToken is null)
+                {
+                    return "-2";
+                }
+                return generateToken; // Login success
+            }
+            return "0";
         }
         catch
         {
-            return 0;
+            return "0";
         }
 
     }
