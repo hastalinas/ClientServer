@@ -53,27 +53,28 @@ public class AccountService
             }
 
             var getAccount = _accountRepository.GetByGuid(getEmployee.Guid);
-            if (getEmployee != null && HashingHandler.ValidateHash(loginDto.Password, getAccount.Password))
+            if (!HashingHandler.ValidateHash(loginDto.Password, getAccount.Password))
             {
-                var claims = new List<Claim>
+                return "-1";
+            }
+           
+            var claims = new List<Claim>
             {
                 new Claim("Guid", getEmployee.Guid.ToString()),
                 new Claim("FullName", $"{getEmployee.FirstName } {getEmployee.LastName }"),
                 new Claim("Email", getEmployee.Email)
             };
 
-                var generateToken = _tokenHandler.GenerateToken(claims);
-                if (generateToken is null)
-                {
-                    return "-2";
-                }
-                return generateToken; // Login success
+            var generateToken = _tokenHandler.GenerateToken(claims);
+            if (generateToken is null)
+            {
+                return "-2";
             }
-            return "0";
+            return generateToken; // Login success
         }
         catch
         {
-            return "0";
+            return "-2";
         }
 
     }
@@ -162,11 +163,10 @@ public class AccountService
 
         _accountRepository.Clear();
 
-        var hashedPassword = HashingHandler.GenerateHash(getAccountDetail.Password);
         var isUpdated = _accountRepository.Update(new Account
         {
             Guid = getAccountDetail.Guid,
-            Password = hashedPassword,
+            Password = getAccountDetail.Password,
             ExpiredTime = DateTime.Now.AddMinutes(5),
             Otp = otp,
             IsUsed = false,

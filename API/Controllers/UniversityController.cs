@@ -7,11 +7,13 @@ using System.Reflection.Metadata.Ecma335;
 using API.Utilities.Handlers;
 using System.Net;
 using API.DTOs.Accounts;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers;
 
 [ApiController]
 [Route("api/universities")]
+[Authorize]
 public class UniversityController : ControllerBase
 {
     private readonly UniversityService _universityService;

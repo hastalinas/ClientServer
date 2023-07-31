@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using API.DTOs.Universities;
 using API.Utilities.Handlers;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers;
 
 [ApiController]
 [Route("api/accounts")]
+[Authorize]
 public class AccountController : ControllerBase
 {
     private readonly AccountService _accountService;
@@ -22,6 +24,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("login")]
+    [AllowAnonymous]
     public IActionResult Login(LoginDto loginDto)
     {
         var result = _accountService.Login(loginDto);
@@ -46,6 +49,7 @@ public class AccountController : ControllerBase
             });
         }
 
+
         return Ok(new ResponseHandler<object>
         {
             Code = StatusCodes.Status200OK,
@@ -59,6 +63,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("register")]
+    [AllowAnonymous]
     public IActionResult Register(RegisterDto registerDto)
     {
         var result = _accountService.Register(registerDto);

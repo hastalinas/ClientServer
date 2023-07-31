@@ -20,7 +20,7 @@ public class TokenHandler : ITokenHandler
         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTConfig:SecretKey"]));
         var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
         var tokenOptions = new JwtSecurityToken(issuer: _configuration["JwtConfig:Issuer"],
-                                                audience: _configuration["JwtConfig:Audiance"],
+                                                audience: _configuration["JwtConfig:Audience"],
                                                 claims: claims,
                                                 expires: DateTime.Now.AddMinutes(10),
                                                 signingCredentials: signinCredentials);

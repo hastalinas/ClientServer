@@ -6,6 +6,7 @@ using API.Models;
 using API.Repositories;
 using API.Services;
 using API.Utilities.Handlers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -13,6 +14,7 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/rooms")]
+[Authorize]
 public class RoomController : ControllerBase
 {
     private readonly RoomService _roomService;
