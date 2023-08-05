@@ -1,0 +1,126 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+/* dark mode */
+:root {
+    --background-color: #ffffff; /* Warna latar belakang default */
+    --text-color: #000000; /* Warna teks default */
+}
+
+.dark-mode {
+    --background-color: #1a1a1a; /* Warna latar belakang saat mode gelap aktif */
+    --text-color: #ffffff; /* Warna teks saat mode gelap aktif */
+}
+
+/* Gaya tabel dalam mode gelap */
+.dark-mode table {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.dark-mode th, .dark-mode td {
+    border-color: var(--text-color);
+}
+
+body {
+    margin-bottom: 60px;
+    /*dark mode*/
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+
+.blue{
+    background-color: blue;
+}
+
+#teks {
+    background-color: aliceblue;
+}
+
+/* Gaya baris terpilih */
+.table-hover tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Gaya baris yang diklik */
+/*.selected-row {
+    background-color: #c0e2ff !important;
+}*/
+
+Copy code
+.dark-mode .modal-content {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+.dark-mode .modal-header {
+    background-color: #343a40;
+    border-bottom: 1px solid #343a40;
+    color: #ffffff;
+}
+
+.dark-mode .modal-title {
+    color: #ffffff;
+}
+
+.dark-mode .modal-body {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+.dark-mode .modal-footer {
+    background-color: #343a40;
+    border-top: 1px solid #343a40;
+    color: #ffffff;
+}
+
+.dark-mode .btn-secondary {
+    color: #ffffff;
+    background-color: #343a40;
+    border-color: #343a40;
+}
+
+    .dark-mode .btn-secondary:hover {
+        color: #ffffff;
+        background-color: #4e545b;
+        border-color: #4e545b;
+    }
+
+.dark-mode .btn-primary {
+    color: #ffffff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+    .dark-mode .btn-primary:hover {
+        color: #ffffff;
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+.dark-mode .btn-info {
+    color: #ffffff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+    .dark-mode .btn-info:hover {
+        color: #ffffff;
+        background-color: #117a8b;
+        border-color: #117a8b;
+    }
+
+

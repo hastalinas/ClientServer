@@ -1,0 +1,95 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@*<div class="row">
+    <div class="col-6">Column 1
+        <div class="row">Row 1</div>
+        <div class="row">Row 2</div>
+    </div>
+    
+    <p id="paragraf">Ini harus ke ubah</p>
+
+    <!-- Force next columns to break to new line at md breakpoint and up -->
+    <div class="w-100 d-none d-md-block"></div>
+    <button onclick='changeText()'>Ubah</button>
+</div>*@
+
+@*<div class="row border border-primary" >
+    <div class="col" style="max-height: 500px">
+        Some text to enable scrolling.. Lorem ipsum dolor sit amet, 
+        illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo. 
+        Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et. 
+        Inciderint efficiantur his ad. Eum no molestiae voluptatibus.
+    </div>
+
+    <div class="col border border-primary" style="max-height:100%;">
+
+        <div class="row border border-primary">
+            <div class="col">
+                <p id="text"> 
+                    ini paragraf 1
+                    Some text to enable scrolling.. Lorem ipsum dolor sit amet,
+                    illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo.
+                    Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et.
+                    Inciderint efficiantur his ad. Eum no molestiae voluptatibus.
+                </p>
+            </div>
+        </div>
+
+        <div class="row border border-primary">
+            <div class="col">
+                <p id="color">
+                    ini paragraf 2
+                    Some text to enable scrolling.. Lorem ipsum dolor sit amet,
+                    illum definitiones no quo, maluisset concludaturque et eum, altera fabulas ut quo.
+                    Atqui causae gloriatur ius te, id agam omnis evertitur eum. Affert laboramus repudiandae nec et.
+                    Inciderint efficiantur his ad. Eum no molestiae voluptatibus.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+<br />
+<button onclick='changeText()' id="teks" >Ubah text</button>
+<button onclick='changeColor()' id="warna">Ubah warna</button>*@
+
+<h1>API Star Wars</h1>
+<table class="table table-bordered border-info table-hover"> 
+    <thead class="table-info">
+        <tr >
+            <th class="text-center">No</th>
+            <th class="text-center">Name</th>
+            <th class="text-center">Height</th>
+            <th class="text-center">Mass</th>
+            <th class="text-center">Gender</th>
+            <th class="text-center">Birth Year</th>
+            <th class="text-center">Action</th>
+        </tr>
+    </thead>
+    <tbody id="listSW"></tbody>
+</table>
+
+<button onclick="toggleDarkMode()">Change To Dark Mode</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Data Pokemon</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
