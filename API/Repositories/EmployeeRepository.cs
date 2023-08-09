@@ -24,7 +24,8 @@ public class EmployeeRepository : GeneralRepository<Employee>, IEmployeeReposito
 
     public string GetAutoNik()
     {
-        return _context.Set<Employee>().ToList().LastOrDefault()?.Nik;
+        var data = _context.Set<Employee>().ToList().LastOrDefault()?.Nik;
+        return data;
     }
 
     public Employee? GetByEmail(string email)

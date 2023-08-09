@@ -60,7 +60,7 @@ body {
     background-color: #c0e2ff !important;
 }*/
 
-Copy code
+
 .dark-mode .modal-content {
     background-color: #1a1a1a;
     color: #ffffff;
@@ -122,5 +122,6 @@ Copy code
         background-color: #117a8b;
         border-color: #117a8b;
     }
+
 
 

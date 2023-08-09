@@ -22,34 +22,52 @@
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-info">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Data Pokemon</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-light" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-
                 <div class="row">
                     <div class="col-md-5 text-left">
-                        <img src="" alt=""  id="img" style="max-width: 150px;">
+                        <img src="" alt="" id="img" style="max-width: 170px;">
+                        <br />
+                        <br />
+                        <p class="mb-0 text-center">Types</p>
+                        <p class="text-center" id="type"></p>
                     </div>
                     <div class="col-md-7 text-left">
-                        @*<p>type<span class="badge text-bg-primary" " id="type"></span></p>*@
-                        <span id="type"></span></p>
-
-                        <p class="mb-1">Name  : <span id="name"></span></p>
-                        <p class="mb-1">Weight: <span id="weight"></span></p>
-                        <p class="mb-1">Height: <span id="height"></span></p>
-                        <p class="mb-1">Base Experience : <span id="experience-progress"></span></p>
+                        <span id="type"></span>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="mb-1">Name</p>
+                                <p class="mb-1">Weight</p>
+                                <p class="mb-1">Height</p>
+                                <p class="mb-1">Base Experience</p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="mb-1">:</p>
+                                <p class="mb-1">:</p>
+                                <p class="mb-1">:</p>
+                                <p class="mb-1">:</p>
+                            </div>
+                            <div class="col-md-1">
+                                <p class="mb-1 text-capitalize" id="name"></p>
+                                <p class="mb-1" id="weight"></p>
+                                <p class="mb-1" id="height"></p>
+                                <p class="mb-1" id="experience-progress"></p>
+                            </div>
+                        </div>
+                        
                         <p class="mb-1">Abilities </p>
-                        <ul id="abilities"></ul>
+                        <ul class="text-capitalize"  id="abilities"></ul>
 
                     </div>
                 </div>
-                <hr />
-@*                <p class="mb-1">Stat : </p>
-                <ul id="statName"></ul>*@
-                <p class="mb-1">Stats Name</p>
-                <ul id="stats-list"></ul>
+                <hr style="border: 3px solid cyan;" />
+
+                <p class="mb-1 text-center"><b>Statistics</b></p>
+                <p id="stats-list"></p>
+                <p class="text-center"><b>Total Statistic</b></p>
                 <div class="progress mt-3" role="progressbar" aria-label="Animated striped example" aria-valuemin="0" aria-valuemax="100">
                     <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" id="stats-progress" style="width: 0%;">
                         <span class="progress-text">0%</span>
@@ -57,8 +75,9 @@
                 </div>
 
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+            <div class="modal-footer bg-secondary">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                 @*<button type="button" class="btn btn-primary">Save changes</button>*@
             </div>
         </div>
