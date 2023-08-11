@@ -1,10 +1,12 @@
 ﻿using API.DTOs.Employees;
 using API.Models;
 using Client.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers;
 
+[Authorize]
 public class EmployeeController : Controller
 {
     private readonly IEmployeeRepository repository;

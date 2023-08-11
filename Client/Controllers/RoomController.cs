@@ -1,9 +1,11 @@
 ﻿using API.DTOs.Rooms;
 using API.Models;
 using Client.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers;
+[Authorize]
 
 public class RoomController : Controller
 {

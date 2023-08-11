@@ -50,7 +50,7 @@ public class AccountController : ControllerBase
         }
 
 
-        return Ok(new ResponseHandler<object>
+        return Ok(new ResponseHandler<TokenDto>
         {
             Code = StatusCodes.Status200OK,
             Status = HttpStatusCode.OK.ToString(),
