@@ -6,7 +6,7 @@ public class EmployeeDetailDto
 {
     //Employee
     public Guid EmployeeGuid { get; set; }
-    public string NIK { get; set; }
+    public string Nik { get; set; }
     public string FullName { get; set; }
     public DateTime BirthDate { get; set; }
     public GenderLevel Gender { get; set; }

@@ -114,7 +114,7 @@ public class EmployeeService
                      select new EmployeeDetailDto
                      {
                          EmployeeGuid = em.Guid,
-                         NIK = em.Nik,
+                         Nik = em.Nik,
                          FullName = em.FirstName + " " + em.LastName,
                          BirthDate = em.BirthDate,
                          Gender = em.Gender,

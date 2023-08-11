@@ -13,9 +13,9 @@ public class NewEmployeeValidator : AbstractValidator<NewEmployeeDto>
         _employeeRepository = employeeRepository;
         //RuleFor(e => e.Nik).NotEmpty().MaximumLength(5);
 
-        RuleFor(e => e.Firstname).NotEmpty();
+        RuleFor(e => e.FirstName).NotEmpty();
 
-        RuleFor(e => e.Birtdate).NotEmpty()
+        RuleFor(e => e.BirthDate).NotEmpty()
             .LessThanOrEqualTo(DateTime.Now.AddYears(-10)).WithMessage("Age not availailable");
 
         RuleFor(e => e.Gender).NotNull()
@@ -25,9 +25,10 @@ public class NewEmployeeValidator : AbstractValidator<NewEmployeeDto>
                                         .EmailAddress().WithMessage("Email is not valid")
                                         .Must(IsDuplicateValue).WithMessage("Email already exist");
 
-        RuleFor(e => e.Hiringdate).NotEmpty();
 
-        RuleFor(e => e.Phone)
+        RuleFor(e => e.HiringDate).NotEmpty();
+
+        RuleFor(e => e.PhoneNumber)
             .NotEmpty()
             .MaximumLength(15)
             .Matches("^(^\\+62|62|^08)(\\d{3,4}-?){2}\\d{3,4}$")

@@ -13,9 +13,9 @@ public class EmployeeValidator : AbstractValidator<UpdateEmployeeNikDto>
         _employeeRepository = employeeRepository;
         //RuleFor(e => e.Nik).NotEmpty().MaximumLength(5).WithMessage("Max charcter 5");
 
-        RuleFor(e => e.Firstname).NotEmpty();
+        RuleFor(e => e.FirstName).NotEmpty();
 
-        RuleFor(e => e.Birtdate).NotEmpty()
+        RuleFor(e => e.BirthDate).NotEmpty()
             .LessThanOrEqualTo(DateTime.Now.AddYears(-10));
 
         RuleFor(e => e.Gender).NotNull()
@@ -26,9 +26,9 @@ public class EmployeeValidator : AbstractValidator<UpdateEmployeeNikDto>
                                         //.Must((e, email) => Check(employeeRepository.GetByGuid, email) is true).WithMessage("Email already exist")
                                         .Must(IsDuplicateValue).WithMessage("Email already exists"); //cek email
 
-        RuleFor(e => e.Hiringdate).NotEmpty();
+        RuleFor(e => e.HiringDate).NotEmpty();
 
-        RuleFor(e => e.Phone)
+        RuleFor(e => e.PhoneNumber)
             .NotEmpty()
             .MaximumLength(20)
             .Matches("^(^\\+62|62|^08)(\\d{3,4}-?){2}\\d{3,4}$")
@@ -40,6 +40,7 @@ public class EmployeeValidator : AbstractValidator<UpdateEmployeeNikDto>
     {
         return _employeeRepository.isNotExist(value);
     }
+
 
 }
 

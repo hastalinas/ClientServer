@@ -1,0 +1,184 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_LayoutAdmin";
+}
+
+<body>
+    <div class="container">
+    <h1 class="text-center">Data Employees</h1>
+
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#insertEmployee">Add Employee <i class="fa-solid fa-plus"></i></button>
+
+    <br />
+    <br />
+    <table class="table table-hover table-bordered" style="border-collapse:collapse" id="tableEmployee">
+        <thead class="table-danger">
+            <tr>
+                @*<th class="text-center">Guid</th>*@
+                <th class="text-center">No</th>
+                <th class="text-center">NIK</th>
+                <th class="text-center">First Name</th>
+                <th class="text-center">Last Name</th>
+                @*<th class="text-center">Full Name</th>*@
+                <th class="text-center">Birth Date</th>
+                <th class="text-center">Gender</th>
+                <th class="text-center">Hiring Date</th>
+                <th class="text-center">Email</th>
+                <th class="text-center">Phone</th>
+                <th class="text-center">Action</th>
+            </tr>
+        </thead>
+    </table>
+    <!-- Insert button -->
+    @*<div id="tableButtons">
+    <button id="btnInsert" class="btn btn-success">Insert</button>
+    </div>*@
+    <button onclick="toggleDarkMode()">  <span id="dark-mode-symbol">&#9728;</span></button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="insertEmployee" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Data Employee</h1>
+                    <button type="button" class="btn-close btn-light" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md text-left">
+                                <span id="type"></span>
+                                <div class="row">
+                                    <div class="col-md">
+                                        <p class="mb-1">First Name</p>
+                                        <input type="text" class="form-control" id="firstname">
+                                        <p class="mb-1">Last Name</p>
+                                        <input type="text" class="form-control" id="lastname">
+                                        <p class="mb-1">Birth Date</p>
+                                        <input type="date" class="form-control" id="birthdate">
+                                        <p class="mb-1">Gender</p>
+                                        <select class="form-select" id="gender" aria-label="Floating label select example">
+                                            <option selected>Open this select menu</option>
+                                            <option value="0">Female</option>
+                                            <option value="1">Male</option>
+                                        </select>
+                                        <p class="mb-1">Hiring Date</p>
+                                        <input type="date" class="form-control" id="hiringdate">
+                                        <p class="mb-1">Email</p>
+                                        <input type="text" class="form-control" id="email">
+                                        <p class="mb-1">Phone</p>
+                                        <input type="text" class="form-control" id="phone">
+                                        <br />
+                                        <button onclick="insertEmployee()" type="button" id="btnSave" class="btn btn-primary">Add</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <br />
+                    </form>
+
+                </div>
+                @*<div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>*@
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal for Edit -->
+    <div class="modal fade" id="editEmployee" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Employee</h1>
+                    <button type="button" class="btn-close btn-light" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md text-left">
+                                <p class="mb-1">NIK</p>
+                                <input type="text" class="form-control" readonly id="editNik"> <!-- Hidden input for employee ID -->
+                                <p class="mb-1">First Name</p>
+                                <input type="text" class="form-control" id="editFirstname">
+                                <p class="mb-1">Last Name</p>
+                                <input type="text" class="form-control" id="editLastname">
+                                <p class="mb-1">Birth Date</p>
+                                <input type="date" class="form-control" id="editBirthdate">
+                                <p class="mb-1">Gender</p>
+                                <select class="form-select" id="editGender" aria-label="Floating label select example">
+                                    <option selected>Open this select menu</option>
+                                    <option value="0">Female</option>
+                                    <option value="1">Male</option>
+                                </select>
+                                <p class="mb-1">Hiring Date</p>
+                                <input type="date" class="form-control" id="editHiringdate">
+                                <p class="mb-1">Email</p>
+                                <input type="text" class="form-control" id="editEmail">
+                                <p class="mb-1">Phone</p>
+                                <input type="text" class="form-control" id="editPhone">
+                                <br />
+                                <button onclick="saveEditedEmployee()" type="button" id="btnSaveEdit" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </div>
+                        <br />
+                    </form>
+                </div>
+                @*            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>*@
+            </div>
+        </div>
+    </div>
+
+        <div class="modal fade" id="detailEmployee" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Detail Employee</h1>
+                        <button type="button" class="btn-close btn-light" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="row">
+                                <div class="col-md text-left">
+                                    <p class="mb-1">NIK</p>
+                                    <input type="text" class="form-control" readonly id="editNik"> <!-- Hidden input for employee ID -->
+                                    <p class="mb-1">First Name</p>
+                                    <input type="text" class="form-control" id="editFirstname">
+                                    <p class="mb-1">Last Name</p>
+                                    <input type="text" class="form-control" id="editLastname">
+                                    <p class="mb-1">Birth Date</p>
+                                    <input type="date" class="form-control" id="editBirthdate">
+                                    <p class="mb-1">Gender</p>
+                                    <select class="form-select" id="editGender" aria-label="Floating label select example">
+                                        <option selected>Open this select menu</option>
+                                        <option value="0">Female</option>
+                                        <option value="1">Male</option>
+                                    </select>
+                                    <p class="mb-1">Hiring Date</p>
+                                    <input type="date" class="form-control" id="editHiringdate">
+                                    <p class="mb-1">Email</p>
+                                    <input type="text" class="form-control" id="editEmail">
+                                    <p class="mb-1">Phone</p>
+                                    <input type="text" class="form-control" id="editPhone">
+                                    <br />
+                                    <button onclick="saveEditedEmployee()" type="button" id="btnSaveEdit" class="btn btn-primary">Save Changes</button>
+                                </div>
+                            </div>
+                            <br />
+                        </form>
+                    </div>
+                    @*            <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+
+</div>
+</body>

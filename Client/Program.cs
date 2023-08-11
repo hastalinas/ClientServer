@@ -1,11 +1,14 @@
 using Client.Contracts;
-using Client.Repository;
+using Client.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+builder.Services.AddScoped(typeof(IRepository<,>), typeof(GeneralRepository<,>));
+
 
 var app = builder.Build();
 
@@ -23,6 +26,17 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+/*// Configure CORS here
+app.UseCors(builder => builder
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});*/
 
 app.MapControllerRoute(
     name: "default",

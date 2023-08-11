@@ -1,8 +1,7 @@
 ﻿using API.DTOs.Employees;
+using API.Models;
 using Client.Contracts;
-using Client.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace Client.Controllers;
 
@@ -18,41 +17,74 @@ public class EmployeeController : Controller
     public async Task<IActionResult> Index()
     {
         var result = await repository.Get();
-        var ListEmployee = new List<NewEmployeeDto>();
+        var ListRoom = new List<Employee>();
 
         if (result.Data != null)
         {
-            ListEmployee = result.Data.ToList();
+            ListRoom = result.Data.ToList();
         }
-        return View(ListEmployee);
+        return View(ListRoom);
     }
 
     [HttpGet]
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
         return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(NewEmployeeDto newEmploye)
+    public async Task<IActionResult> Create(Employee employee)
     {
+        var result = await repository.Post(employee);
 
-        var result = await repository.Post(newEmploye);
-        if (result.Status == "200")
+        if (result.Code == 200)
         {
-            TempData["Success"] = "Data berhasil masuk";
-            return RedirectToAction(nameof(Index));
-        }
-        else if (result.Status == "409")
-        {
-            ModelState.AddModelError(string.Empty, result.Message);
-            return View();
+            RedirectToAction("Index");
         }
         return RedirectToAction(nameof(Index));
-
     }
-    /*public IActionResult Index()
+
+    [HttpGet]
+    public async Task<IActionResult> Edit(Guid id)
     {
-        return View();
-    }*/
+        var result = await repository.Get(id);
+        var ListEmployee = new Employee();
+
+        if (result.Data != null)
+        {
+            ListEmployee = result.Data;
+        }
+        return View(ListEmployee);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Update(Employee employee)
+    {
+        var result = await repository.Put(employee.Guid, employee);
+
+        if (result.Code == 200)
+        {
+            TempData["Success"] = $"Data has been Successfully Updated! - {result.Message}!";
+            return RedirectToAction("Index", "Employee");
+        }
+        return RedirectToAction(nameof(Edit));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Delete(Guid guid)
+    {
+        var result = await repository.Delete(guid);
+
+        if (result.Code == 200)
+        {
+            TempData["Success"] = $"Data has been Successfully Deleted! - {result.Message}!";
+        }
+        else
+        {
+            TempData["Error"] = $"Failed to Delete Data - {result.Message}!";
+        }
+
+        return RedirectToAction("Index", "Employee");
+    }
+
 }

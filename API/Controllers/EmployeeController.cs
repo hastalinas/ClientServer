@@ -168,17 +168,17 @@ public class EmployeeController : ControllerBase
                 Code = StatusCodes.Status500InternalServerError,
                 Status = HttpStatusCode.InternalServerError.ToString(),
                 Message = "Error retrieve data",
-                Data = null
+                
             });
             //return StatusCode(500, "Error Retrieve from database");
         }
 
-        return Ok(new ResponseHandler<int>
+        return Ok(new ResponseHandler<EmployeeDto>
         {
             Code = StatusCodes.Status200OK,
             Status = HttpStatusCode.OK.ToString(),
             Message = "Update success",
-            Data = result
+            
         });
     }
 
@@ -199,16 +199,16 @@ public class EmployeeController : ControllerBase
                 Code = StatusCodes.Status500InternalServerError,
                 Status = HttpStatusCode.InternalServerError.ToString(),
                 Message = "Server error",
-                Data = null
+                
             });
         }
 
-        return Ok(new ResponseHandler<int>
+        return Ok(new ResponseHandler<EmployeeDto>
         {
             Code = StatusCodes.Status200OK,
             Status = HttpStatusCode.OK.ToString(),
             Message = "Delete success",
-            Data = result
+            
         });
     }
 }

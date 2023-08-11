@@ -1,5 +1,4 @@
-﻿using API.Utilities;
-using API.Utilities.Handlers;
+﻿using API.Utilities.Handlers;
 
 namespace Client.Contracts;
 

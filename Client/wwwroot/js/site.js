@@ -265,6 +265,49 @@ function detailPok(stringURL){
 //--------------------------------------------------------------------------------------
 // --Employee--
 $(document).ready(function () {
+    $('#export').DataTable({
+        dom: 'Blfrtip',
+        buttons: [
+            {
+                extend: 'colvis',
+                title: 'Colvis',
+                text: 'Column Visibility',
+                className: 'btn btn-danger'
+            },
+            {
+                extend: 'excelHtml5',
+                title: 'Excel',
+                text: 'Export to excel',
+                className: 'btn btn-info',
+                /*Columns to export*/
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                title: 'PDF',
+                text: 'Export to PDF',
+                className: 'btn btn-secondary',
+                /*Columns to export*/
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'print',
+                title: 'Print',
+                text: 'Print Table',
+                className: 'btn btn-success',
+                /*Columns to export*/
+                exportOptions: {
+                    columns: ':visible'
+                }
+            }
+        ]
+    });
+});
+$(document).ready(function () {
     let table = new DataTable('#tableEmployee', {
         ajax: {
             url: "https://localhost:7237/api/employees",
@@ -479,7 +522,6 @@ function detailEmployees(guid) {
 
 
 //Create pie or douhnut chart
-
 $(document).ready(function () {
     $.ajax({
         url: "https://localhost:7237/api/employees"

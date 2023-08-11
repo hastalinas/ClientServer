@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("CSS", required: false)
     <link rel="stylesheet" href="~/Client.styles.css" asp-append-version="true" />
 
     <!-- Google Font: Source Sans Pro -->
@@ -98,7 +99,7 @@
                         <a href="#" class="dropdown-item">
                             <!-- Message Start -->
                             <div class="media">
-                                <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                                <img src="~/dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
                                         Brad Diesel
@@ -175,9 +176,9 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Sidebar -->
             <!-- Brand Logo -->
-            <a href="index3.html" class="brand-link" >
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="brand-link">
                 <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">AdminLTE</span>
+                <span class="brand-text font-weight-light">Home</span>
             </a>
 
             <!-- Sidebar -->
@@ -188,7 +189,7 @@
                         <img src="dist/img/UserSherin1.jpeg" class="img-circle" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">Sherina Eria Hastalina</a>
+                        <a href="#" class="d-block">Sherina Eria Has</a>
                     </div>
                 </div>
 
@@ -209,7 +210,7 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" role="menu" data-accordion="false"> <!--data-widget="treeview"-->
                         <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
                         <li class="nav-item menu-open">
-                            <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link active">
+                            <a asp-area="" asp-controller="Dashboard" asp-action="Index" class="nav-link active">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard
@@ -224,6 +225,12 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
+                                    <a asp-area="" asp-controller="Room" asp-action="Index" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Room</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link" asp-area="" asp-controller="Tugas" asp-action="Index" >
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Pokemon</p>
@@ -233,6 +240,12 @@
                                     <a class="nav-link" asp-area="" asp-controller="Latihan" asp-action="Index">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Star Wars</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Login" asp-action="Index">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Log Out</p>
                                     </a>
                                 </li>
                             </ul>
@@ -278,6 +291,7 @@
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+
     <!-- ... -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
@@ -291,6 +305,11 @@
 
     <!-- Add AdminLTE scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0/js/adminlte.min.js"></script>
+
+    <!--colvis-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" />
 
     <!-- Chart-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
