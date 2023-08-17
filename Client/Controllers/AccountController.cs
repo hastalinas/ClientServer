@@ -2,10 +2,12 @@
 using API.Models;
 using API.Utilities.Handlers;
 using Client.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace Client.Controllers;
+[Authorize(Roles ="Admin")]
 
 public class AccountController : Controller
 {
@@ -29,11 +31,13 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> Login()
     {
         return View();
     }
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> Login(LoginDto login)
     {
         var result = await repository.Login(login);

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Manager")]
 public class EmployeeController : Controller
 {
     private readonly IEmployeeRepository repository;

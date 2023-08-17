@@ -15,7 +15,7 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/rooms")]
-//[Authorize(Roles = "Manager")]
+[Authorize(Roles = "Manager, Admin")]
 [EnableCors]
 public class RoomController : ControllerBase
 {
